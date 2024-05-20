@@ -1,0 +1,31 @@
+.line-dots {
+  .dot-container {
+    position: absolute;
+    left: calc(50% - 5px);
+    transform: translateX(-50%);
+    width: 30%;
+    overflow-y: scroll;
+    scrollbar-width: none; /* Firefox 浏览器隐藏滚动条 */
+    cursor: pointer;
+
+    &::-webkit-scrollbar {
+      display: none; /* Chrome、Safari 和 Opera 浏览器隐藏滚动条 */
+    }
+
+    .dot {
+      position: absolute;
+      left: 50%;
+      display: flex;
+      align-items: center;
+
+      .left {
+        border-radius: 50%;
+      }
+      .right {
+        margin-left: 25px;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+}

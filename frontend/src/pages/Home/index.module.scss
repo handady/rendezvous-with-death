@@ -1,0 +1,40 @@
+.index {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+
+  .center-line {
+    width: 2px;
+    background-color: #c2b29a;
+    position: absolute;
+  }
+
+  .timeline {
+    position: relative;
+
+    .circle {
+      border-radius: 50%;
+      border: 2px solid #c2b29a;
+    }
+  }
+
+  .excalidraw-dialog {
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .excalidraw-dialog-mask {
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      position: absolute;
+    }
+  }
+}

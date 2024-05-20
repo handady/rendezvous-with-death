@@ -1,0 +1,27 @@
+{
+  "name": "rendezvous-with-death",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "concurrently \"npm run start-react\" \"npm run start-electron\"",
+    "start-react": "cd frontend && npm start",
+    "start-electron": "wait-on http://localhost:520 && electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/handady/rendezvous-with-death.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/handady/rendezvous-with-death/issues"
+  },
+  "homepage": "https://github.com/handady/rendezvous-with-death#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^30.0.6",
+    "wait-on": "^7.2.0"
+  }
+}

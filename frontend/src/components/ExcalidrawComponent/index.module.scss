@@ -1,0 +1,31 @@
+.export-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 10%;
+  z-index: 10;
+  background-color: yellow;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.close-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 15%;
+  z-index: 10;
+  background-color: yellow;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.container {
+  height: 80vh;
+  width: 80%;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+}
