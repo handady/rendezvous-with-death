@@ -1,16 +1,11 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import styles from "./index.module.scss";
-import {
-  Excalidraw,
-  exportToSvg,
-  exportToBlob,
-  exportToCanvas,
-} from "@excalidraw/excalidraw";
+import { Excalidraw, serializeAsJSON, restore } from "@excalidraw/excalidraw";
 
 const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
-  const [elements, setElements] = useState([]);
-  const [appState, setAppState] = useState({});
+  const [elements, setElements] = useState([]) as any;
+  const [appState, setAppState] = useState({}) as any;
   const [files, setFiles] = useState({});
 
   const handleChange = useCallback((newElements, newAppState, newFiles) => {
@@ -36,21 +31,16 @@ const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
     });
   }, []);
 
-  const handleExport = async () => {
-    const exportOpts = {
-      elements,
-      appState,
-      files,
-    };
-
-    const svg = await exportToSvg(exportOpts);
-    console.log(svg);
-
-    const blob = await exportToBlob(exportOpts);
-    const canvas = await exportToCanvas(exportOpts);
-
-    console.log(blob);
-    console.log(canvas);
+  const saveToFile = () => {
+    const json = serializeAsJSON(elements, appState, files, "local");
+    window.electronAPI.send("saveData", currentItem.time, json);
+    window.electronAPI.receive("saveDataResponse", (response) => {
+      if (response.error) {
+        console.error(response.error);
+      } else {
+        console.log("File saved successfully");
+      }
+    });
   };
 
   const handleBack = () => {
@@ -61,8 +51,24 @@ const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
   };
 
   useEffect(() => {
-    // 如果需要，可以在此执行某些操作
-  }, [elements, appState, files]);
+    if (currentItem.time) {
+      window.electronAPI.send("loadData", currentItem.time);
+      window.electronAPI.receive("loadDataResponse", (data) => {
+        if (data.error) {
+          console.error(data.error);
+        } else {
+          const importedData = restore(
+            data.elements,
+            data.appState,
+            data.files
+          );
+          setElements(importedData.elements);
+          setAppState(importedData.appState);
+          setFiles(importedData.files);
+        }
+      });
+    }
+  }, [currentItem.time]);
 
   return (
     <div className={styles.container}>
@@ -70,7 +76,7 @@ const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
       <button className={styles["close-btn"]} onClick={handleBack}>
         返回
       </button>
-      <button className={styles["export-btn"]} onClick={handleExport}>
+      <button className={styles["export-btn"]} onClick={saveToFile}>
         保存
       </button>
     </div>

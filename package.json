@@ -6,7 +6,9 @@
   "scripts": {
     "start": "concurrently \"npm run start-react\" \"npm run start-electron\"",
     "start-react": "cd frontend && npm start",
-    "start-electron": "wait-on http://localhost:520 && electron ."
+    "start-electron": "echo Waiting for server... && wait-on http://localhost:520 && echo Server is up! && electron .",
+    "build-react": "cd frontend && npm run build",
+    "start:electron": "electron ."
   },
   "repository": {
     "type": "git",
@@ -23,5 +25,8 @@
     "concurrently": "^8.2.2",
     "electron": "^30.0.6",
     "wait-on": "^7.2.0"
+  },
+  "dependencies": {
+    "antd": "^5.17.3"
   }
 }
