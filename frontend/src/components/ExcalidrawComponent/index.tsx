@@ -7,6 +7,7 @@ const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
   const [elements, setElements] = useState([]) as any;
   const [appState, setAppState] = useState({}) as any;
   const [files, setFiles] = useState({});
+  const [initialDataLoaded, setInitialDataLoaded] = useState(false);
 
   const handleChange = useCallback((newElements, newAppState, newFiles) => {
     setElements((prevElements) => {
@@ -65,6 +66,7 @@ const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
           setElements(importedData.elements);
           setAppState(importedData.appState);
           setFiles(importedData.files);
+          setInitialDataLoaded(true);
         }
       });
     }
@@ -72,7 +74,17 @@ const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
 
   return (
     <div className={styles.container}>
-      <Excalidraw onChange={handleChange} langCode="zh-CN" />
+      {initialDataLoaded && (
+        <Excalidraw
+          initialData={{
+            elements,
+            appState,
+            files,
+          }}
+          onChange={handleChange}
+          langCode="zh-CN"
+        />
+      )}
       <button className={styles["close-btn"]} onClick={handleBack}>
         返回
       </button>
