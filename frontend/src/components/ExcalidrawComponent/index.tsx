@@ -58,11 +58,11 @@ const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
         if (data.error) {
           console.error(data.error);
         } else {
-          const importedData = restore(
-            data.elements,
-            data.appState,
-            data.files
-          );
+          const importedData = {
+            elements: data.elements || [],
+            appState: data.appState || {},
+            files: data.files || {},
+          };
           setElements(importedData.elements);
           setAppState(importedData.appState);
           setFiles(importedData.files);
