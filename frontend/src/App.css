@@ -42,3 +42,15 @@
     transform: rotate(360deg);
   }
 }
+
+.excalidraw {
+  --color-on-primary-container: #f5347f;
+  --color-surface-primary-container: #f7cfdeec;
+  --color-surface-high: #fdebf2ec;
+  --button-hover-bg: #fdebf2ec;
+  --color-primary: #faa2c1;
+  --color-primary-darker: #f783ac;
+  --color-primary-darkest: #e94c83;
+  --button-active-border: #f783ac;
+  --color-primary-light: #fcc2d7;
+}
