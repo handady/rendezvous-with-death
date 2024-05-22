@@ -80,6 +80,7 @@ const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
             elements,
             appState,
             files,
+            scrollToContent: true,
           }}
           onChange={handleChange}
           langCode="zh-CN"
