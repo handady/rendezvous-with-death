@@ -9,6 +9,7 @@ import {
   Row,
   Col,
   Divider,
+  message,
 } from "antd";
 import { generate, green, presetPalettes, red } from "@ant-design/colors";
 import PropTypes from "prop-types";
@@ -61,6 +62,16 @@ const AddModal = ({ visible, onCancel }) => {
           params.color = values.color.toHexString();
         }
         console.log("params", params);
+        window.electronAPI.send("saveDiaryEntry", params);
+        window.electronAPI.receive("saveDiaryEntryResponse", (response) => {
+          if (response.success) {
+            message.success("日记保存成功");
+            setSubmitLoading(false);
+          } else {
+            message.error(response.error);
+            setSubmitLoading(false);
+          }
+        });
         form.resetFields();
         onCancel();
       })
