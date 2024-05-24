@@ -3,8 +3,8 @@ import CircleDots from "./components/CircleDot/index.tsx";
 import CircleContent from "./components/CircleContent/index.tsx";
 import LineDots from "./components/LineDot/index.tsx";
 import ExcalidrawComponent from "../../components/ExcalidrawComponent/index.tsx";
-// import Sider from "./components/common/sider";
-// import Add from "./components/common/add";
+import Sidebar from "../../components/Sidebar/index.tsx";
+import AddModal from "./components/AddModal/index.tsx";
 import styles from "./index.module.scss";
 
 const Home = () => {
@@ -32,6 +32,7 @@ const Home = () => {
   const [circleAngle, setCircleAngle] = useState(0);
   const [dotSpacing, setDotSpacing] = useState(50);
   const [excalidrawDialogVisible, setexcalidrawDialogVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const dotRadius = dotDiameter / 2;
   const contentRadius = contentDiameter / 2;
@@ -46,6 +47,14 @@ const Home = () => {
     setCircleAngle(angle);
   };
 
+  // 添加日记
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+  const addItem = () => {
+    setIsModalVisible(true);
+  };
+
   const addCollection = () => {
     console.log("addCollection");
     setexcalidrawDialogVisible(true);
@@ -53,10 +62,6 @@ const Home = () => {
 
   const closeDialog = () => {
     setexcalidrawDialogVisible(false);
-  };
-
-  const addCardSuccess = () => {
-    console.log("addCardSuccess");
   };
 
   const handleClickItem = (item) => {
@@ -129,13 +134,11 @@ const Home = () => {
         onScrollDistance={handleScrollDistance}
         onClickItem={handleClickItem}
       />
-      {/* <Sider onAddCollection={addCollection} />
-      <Add
-        dialogVisible={dialogVisible}
-        currentItem={currentItem}
-        onCloseDialog={closeDialog}
-        onAddCardSuccess={addCardSuccess}
-      /> */}
+      <Sidebar onAddCollection={addItem} />
+      <AddModal
+        visible={isModalVisible}
+        onCancel={handleCancel}
+      />
       {excalidrawDialogVisible && (
         <div className={styles["excalidraw-dialog"]}>
           <div

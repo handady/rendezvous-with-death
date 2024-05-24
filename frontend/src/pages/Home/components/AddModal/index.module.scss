@@ -1,0 +1,27 @@
+.add-modal {
+  .modal-footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .closeBtn {
+      background-color: #bfefff;
+      border: 0;
+      width: 30%;
+      margin-right: 15px;
+    }
+    .closeBtn:hover {
+      background-color: #00bfff;
+      color: white;
+    }
+    .submitBtn {
+      background-color: #fec2d6;
+      border: 0;
+      width: 30%;
+    }
+    .submitBtn:hover {
+      background-color: #f5347f;
+      color: white;
+    }
+  }
+}
