@@ -44,13 +44,13 @@
 }
 
 .excalidraw {
-  --color-on-primary-container: #f5347f;
-  --color-surface-primary-container: #f7cfdeec;
-  --color-surface-high: #fdebf2ec;
-  --button-hover-bg: #fdebf2ec;
-  --color-primary: #faa2c1;
-  --color-primary-darker: #f783ac;
-  --color-primary-darkest: #e94c83;
-  --button-active-border: #f783ac;
-  --color-primary-light: #fcc2d7;
+  --color-on-primary-container: #f5347f !important;
+  --color-surface-primary-container: #f7cfdeec !important;
+  --color-surface-high: #fdebf2ec !important;
+  --button-hover-bg: #fdebf2ec !important;
+  --color-primary: #faa2c1 !important;
+  --color-primary-darker: #f783ac !important;
+  --color-primary-darkest: #e94c83 !important;
+  --button-active-border: #f783ac !important;
+  --color-primary-light: #fcc2d7 !important;
 }
