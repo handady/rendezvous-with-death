@@ -124,9 +124,9 @@ const LineDots = ({
               }`}
             >
               <Button
-                ghost
-                type="primary"
+                type="text"
                 size="small"
+                className={styles.edit}
                 onClick={(e) => {
                   e.stopPropagation(); // 阻止事件冒泡
                   handleEdit(item);
