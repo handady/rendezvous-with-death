@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { Button } from "antd";
 import PropTypes from "prop-types";
 import throttle from "lodash/throttle";
 import styles from "./index.module.scss";
@@ -10,6 +11,7 @@ const LineDots = ({
   dotSpacing = 50,
   onClickItem,
   onScrollDistance,
+  handleEdit,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [startY, setStartY] = useState(0);
@@ -116,7 +118,24 @@ const LineDots = ({
                 height: `${dotSize}px`,
               }}
             ></div>
-            <div className={styles.right}>
+            <div
+              className={`${styles.operationBasic} ${
+                index % 2 === 0 ? styles.operation : styles.operationOdd
+              }`}
+            >
+              <Button
+                ghost
+                type="primary"
+                size="small"
+                onClick={(e) => {
+                  e.stopPropagation(); // 阻止事件冒泡
+                  handleEdit(item);
+                }}
+              >
+                编辑
+              </Button>
+            </div>
+            <div className={index % 2 === 0 ? styles.right : styles.rightOdd}>
               <div className={styles.content}>{item.title}</div>
               <div className={styles.time}>{item.time}</div>
             </div>
@@ -140,6 +159,7 @@ LineDots.propTypes = {
   dotSpacing: PropTypes.number,
   onClickItem: PropTypes.func.isRequired,
   onScrollDistance: PropTypes.func.isRequired,
+  handleEdit: PropTypes.func.isRequired,
 };
 
 export default LineDots;

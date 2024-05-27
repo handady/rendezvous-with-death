@@ -25,6 +25,7 @@ const Home = () => {
   ]);
   const [lineItems, setLineItems] = useState([]) as any; // 日记数据列表
   const [currentItem, setCurrentItem] = useState({});
+  const [currentLineDotItem, setCurrentLineDotItem] = useState({});
   const [dotDiameter, setDotDiameter] = useState(240);
   const [contentDiameter, setContentDiameter] = useState(330);
   const [dotSize, setDotSize] = useState(12);
@@ -33,6 +34,7 @@ const Home = () => {
   const [dotSpacing, setDotSpacing] = useState(50);
   const [excalidrawDialogVisible, setexcalidrawDialogVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isAddModal, setIsAddModal] = useState(true); // 是否是添加日记
 
   const dotRadius = dotDiameter / 2;
   const contentRadius = contentDiameter / 2;
@@ -48,6 +50,7 @@ const Home = () => {
     setIsModalVisible(false);
   };
   const addItem = () => {
+    setIsAddModal(true);
     setIsModalVisible(true);
   };
 
@@ -57,6 +60,13 @@ const Home = () => {
 
   const closeDialog = () => {
     setexcalidrawDialogVisible(false);
+  };
+
+  // 编辑日记
+  const handleEdit = (item) => {
+    setCurrentLineDotItem(item);
+    setIsAddModal(false);
+    setIsModalVisible(true);
   };
 
   const handleClickItem = (item) => {
@@ -82,6 +92,23 @@ const Home = () => {
 
   useEffect(() => {
     loadData();
+    // setLineItems([
+    //   {
+    //     title: "黄山市旅游1",
+    //     color: "#FFA39E",
+    //     time: "2024-05-25",
+    //   },
+    //   {
+    //     title: "黄山市旅游2",
+    //     color: "#FFA39E",
+    //     time: "2024-05-26",
+    //   },
+    //   {
+    //     title: "黄山市旅游3",
+    //     color: "#FFA39E",
+    //     time: "2024-05-27",
+    //   },
+    // ]);
     return () => {
       // Cleanup if needed
     };
@@ -127,12 +154,15 @@ const Home = () => {
         dotSpacing={dotSpacing}
         onScrollDistance={handleScrollDistance}
         onClickItem={handleClickItem}
+        handleEdit={handleEdit}
       />
       <Sidebar onAddCollection={addItem} />
       <AddModal
         visible={isModalVisible}
         onCancel={handleCancel}
         loadData={loadData}
+        isAddModal={isAddModal}
+        currentLineDotItem={currentLineDotItem}
       />
       {excalidrawDialogVisible && (
         <div className={styles["excalidraw-dialog"]}>

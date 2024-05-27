@@ -172,6 +172,61 @@ function setupIpcHandlers() {
       });
     });
   });
+  // 更新日记
+  ipcMain.on("editDiaryEntry", (event, entry) => {
+    const filePath = path.join(__dirname, "data", "diary.json");
+
+    fs.access(filePath, fs.constants.F_OK, (accessErr) => {
+      if (accessErr) {
+        event.reply("editDiaryEntryResponse", { error: "文件不存在" });
+        return;
+      }
+
+      fs.readFile(filePath, "utf8", (readErr, data) => {
+        if (readErr) {
+          console.log(`Error reading file: ${readErr}`);
+          event.reply("editDiaryEntryResponse", { error: readErr.message });
+          return;
+        }
+
+        let diaryEntries;
+        try {
+          diaryEntries = JSON.parse(data);
+        } catch (parseErr) {
+          console.log(`Error parsing JSON: ${parseErr}`);
+          event.reply("editDiaryEntryResponse", { error: parseErr.message });
+          return;
+        }
+
+        const entryIndex = diaryEntries.findIndex((e) => e.time === entry.time);
+        if (entryIndex === -1) {
+          event.reply("editDiaryEntryResponse", {
+            error: "未找到对应的日记条目",
+          });
+          return;
+        }
+
+        // 更新日记条目
+        console.log("触发了 editDiaryEntry", entryIndex);
+        diaryEntries[entryIndex] = entry;
+
+        fs.writeFile(
+          filePath,
+          JSON.stringify(diaryEntries, null, 2),
+          (writeErr) => {
+            if (writeErr) {
+              console.log(`Error writing file: ${writeErr}`);
+              event.reply("editDiaryEntryResponse", {
+                error: writeErr.message,
+              });
+              return;
+            }
+            event.reply("editDiaryEntryResponse", { success: true });
+          }
+        );
+      });
+    });
+  });
 }
 
 module.exports = { setupIpcHandlers };

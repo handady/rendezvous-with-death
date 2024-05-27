@@ -22,7 +22,13 @@ const genPresets = (presets = presetPalettes) =>
     colors,
   }));
 
-const AddModal = ({ visible, onCancel, loadData }) => {
+const AddModal = ({
+  visible,
+  onCancel,
+  loadData,
+  isAddModal,
+  currentLineDotItem,
+}) => {
   const [form] = Form.useForm();
   const { token } = theme.useToken();
   const [submitLoading, setSubmitLoading] = useState(false); // 提交按钮loading
@@ -56,23 +62,28 @@ const AddModal = ({ visible, onCancel, loadData }) => {
         setSubmitLoading(true);
         const params = {
           ...values,
-          time: formatDate2(new Date()),
+          time: isAddModal ? formatDate2(new Date()) : currentLineDotItem.time,
         };
         if (typeof values.color !== "string") {
           params.color = values.color.toHexString();
         }
-        console.log("params", params);
-        window.electronAPI.send("saveDiaryEntry", params);
-        window.electronAPI.receive("saveDiaryEntryResponse", (response) => {
+
+        const channel = isAddModal ? "saveDiaryEntry" : "editDiaryEntry";
+        const responseChannel = isAddModal
+          ? "saveDiaryEntryResponse"
+          : "editDiaryEntryResponse";
+
+        window.electronAPI.send(channel, params);
+        window.electronAPI.once(responseChannel, (response) => {
           if (response.success) {
-            message.success("日记保存成功");
+            message.success(isAddModal ? "日记保存成功" : "日记编辑成功");
             loadData();
-            setSubmitLoading(false);
           } else {
             message.error(response.error);
-            setSubmitLoading(false);
           }
+          setSubmitLoading(false);
         });
+
         form.resetFields();
         onCancel();
       })
@@ -86,12 +97,18 @@ const AddModal = ({ visible, onCancel, loadData }) => {
     if (visible) {
       form.setFieldsValue({ color: "#FFA39E" });
     }
+    if (!isAddModal) {
+      form.setFieldsValue({
+        color: currentLineDotItem.color,
+        title: currentLineDotItem.title,
+      });
+    }
   }, [visible, form]);
 
   return (
     <Modal
       className={styles["add-modal"]}
-      title="添加日记"
+      title={isAddModal ? "添加日记" : "编辑日记"}
       open={visible}
       onCancel={() => {
         form.resetFields();
@@ -153,6 +170,12 @@ AddModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
   loadData: PropTypes.func.isRequired,
+  isAddModal: PropTypes.bool,
+  currentLineDotItem: PropTypes.shape({
+    color: PropTypes.string,
+    title: PropTypes.string,
+    time: PropTypes.string,
+  }),
 };
 
 export default AddModal;

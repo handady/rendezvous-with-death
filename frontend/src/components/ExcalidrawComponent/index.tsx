@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
+import { message } from "antd";
 import PropTypes from "prop-types";
 import styles from "./index.module.scss";
-import { Excalidraw, serializeAsJSON, restore } from "@excalidraw/excalidraw";
+import { Excalidraw, serializeAsJSON } from "@excalidraw/excalidraw";
 
 const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
   const [elements, setElements] = useState([]) as any;
@@ -35,10 +36,12 @@ const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
   const saveToFile = () => {
     const json = serializeAsJSON(elements, appState, files, "local");
     window.electronAPI.send("saveData", currentItem.time, json);
-    window.electronAPI.receive("saveDataResponse", (response) => {
+    window.electronAPI.once("saveDataResponse", (response) => {
       if (response.error) {
         console.error(response.error);
+        message.error(response.error);
       } else {
+        message.success("保存成功");
         console.log("File saved successfully");
       }
     });

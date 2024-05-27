@@ -21,11 +21,38 @@
       .left {
         border-radius: 50%;
       }
+      .operationBasic {
+        width: 60px;
+        position: absolute;
+        box-sizing: border-box;
+        // border: 1px solid rgba(197, 197, 197, 1);
+        backdrop-filter: blur(3px);
+        background-color: rgba(255, 255, 255, 0.38);
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 2px 0px 10px 2px rgba(254, 158, 181, 0.5),
+          inset 0px -5px 16px 0px rgba(254, 158, 181, 0.6),
+          inset 0px 11px 28px 0px rgb(255, 255, 255);
+        padding: 2px
+      }
+      .operation {
+        left: -85px;
+      }
+      .operationOdd{
+        left: 35px;
+      }
       .right {
         margin-left: 25px;
         display: flex;
         flex-direction: column;
       }
+      .rightOdd {
+        margin-left: -100%;
+        transform: translateX(-25px);
+        display: flex;
+        flex-direction: column;
+      }
     }
+
   }
 }
