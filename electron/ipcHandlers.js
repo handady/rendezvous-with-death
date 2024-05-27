@@ -138,6 +138,40 @@ function setupIpcHandlers() {
       }
     });
   });
+  // 读取日记
+  ipcMain.on("loadDiaryEntries", (event) => {
+    const filePath = path.join(__dirname, "data", "diary.json");
+
+    fs.access(filePath, fs.constants.F_OK, (accessErr) => {
+      if (accessErr) {
+        console.log(`File not found: ${filePath}`);
+        event.reply("loadDiaryEntriesResponse", { error: "文件不存在" });
+        return;
+      }
+
+      fs.readFile(filePath, "utf8", (readErr, data) => {
+        if (readErr) {
+          console.log(`Error reading file: ${readErr}`);
+          event.reply("loadDiaryEntriesResponse", { error: readErr.message });
+          return;
+        }
+
+        let diaryEntries;
+        try {
+          diaryEntries = JSON.parse(data);
+        } catch (parseErr) {
+          console.log(`Error parsing JSON: ${parseErr}`);
+          event.reply("loadDiaryEntriesResponse", { error: parseErr.message });
+          return;
+        }
+
+        event.reply("loadDiaryEntriesResponse", {
+          success: true,
+          data: diaryEntries,
+        });
+      });
+    });
+  });
 }
 
 module.exports = { setupIpcHandlers };

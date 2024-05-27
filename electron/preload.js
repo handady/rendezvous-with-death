@@ -4,7 +4,7 @@ const { contextBridge, ipcRenderer } = require("electron");
 contextBridge.exposeInMainWorld("electronAPI", {
   send: (channel, ...args) => {
     // 使用 ...args 以支持多个参数
-    let validChannels = ["loadData", "saveData", "saveDiaryEntry"];
+    let validChannels = ["loadData", "saveData", "saveDiaryEntry","loadDiaryEntries"];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, ...args);
     }
@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
       "loadDataResponse",
       "saveDataResponse",
       "saveDiaryEntryResponse",
+      "loadDiaryEntriesResponse",
     ];
     if (validChannels.includes(channel)) {
       // 从主进程接收

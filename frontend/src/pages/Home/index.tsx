@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
+import { message } from "antd";
 import CircleDots from "./components/CircleDot/index.tsx";
 import CircleContent from "./components/CircleContent/index.tsx";
 import LineDots from "./components/LineDot/index.tsx";
@@ -22,8 +23,7 @@ const Home = () => {
     { color: "green", time: "2019-11-11", content: "content11" },
     { color: "blue", time: "2019-11-12", content: "content12" },
   ]);
-
-  const [lineItems, setLineItems] = useState([]) as any;
+  const [lineItems, setLineItems] = useState([]) as any; // 日记数据列表
   const [currentItem, setCurrentItem] = useState({});
   const [dotDiameter, setDotDiameter] = useState(240);
   const [contentDiameter, setContentDiameter] = useState(330);
@@ -37,10 +37,6 @@ const Home = () => {
   const dotRadius = dotDiameter / 2;
   const contentRadius = contentDiameter / 2;
   const degreesPerPixel = 30 / (dotSize + dotSpacing);
-
-  const updateItems = (item) => {
-    console.log("updateItems", item);
-  };
 
   const handleScrollDistance = (distance) => {
     const angle = distance * degreesPerPixel;
@@ -56,7 +52,6 @@ const Home = () => {
   };
 
   const addCollection = () => {
-    console.log("addCollection");
     setexcalidrawDialogVisible(true);
   };
 
@@ -70,20 +65,19 @@ const Home = () => {
   };
 
   const loadData = useCallback(() => {
-    setTimeout(() => {
-      setLineItems([
-        {
-          color: "rgba(255,105,180)",
-          title: "测试标题1",
-          time: "2020-01-02 00:00:00",
-        },
-        {
-          color: "green",
-          title: "测试标题2",
-          time: "2020-01-03 00:00:00",
-        },
-      ]);
-    }, 1000);
+    // 通过预加载脚本的API发送加载请求
+    window.electronAPI.send("loadDiaryEntries");
+
+    // 接收响应
+    const handleLoadResponse = (response) => {
+      if (response.error) {
+        message.error(response.error);
+      } else {
+        setLineItems(response.data);
+      }
+    };
+
+    window.electronAPI.receive("loadDiaryEntriesResponse", handleLoadResponse);
   }, []);
 
   useEffect(() => {
@@ -138,6 +132,7 @@ const Home = () => {
       <AddModal
         visible={isModalVisible}
         onCancel={handleCancel}
+        loadData={loadData}
       />
       {excalidrawDialogVisible && (
         <div className={styles["excalidraw-dialog"]}>

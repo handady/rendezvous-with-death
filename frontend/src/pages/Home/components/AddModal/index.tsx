@@ -22,7 +22,7 @@ const genPresets = (presets = presetPalettes) =>
     colors,
   }));
 
-const AddModal = ({ visible, onCancel }) => {
+const AddModal = ({ visible, onCancel, loadData }) => {
   const [form] = Form.useForm();
   const { token } = theme.useToken();
   const [submitLoading, setSubmitLoading] = useState(false); // 提交按钮loading
@@ -66,6 +66,7 @@ const AddModal = ({ visible, onCancel }) => {
         window.electronAPI.receive("saveDiaryEntryResponse", (response) => {
           if (response.success) {
             message.success("日记保存成功");
+            loadData();
             setSubmitLoading(false);
           } else {
             message.error(response.error);
@@ -151,6 +152,7 @@ const AddModal = ({ visible, onCancel }) => {
 AddModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   onCancel: PropTypes.func.isRequired,
+  loadData: PropTypes.func.isRequired,
 };
 
 export default AddModal;
