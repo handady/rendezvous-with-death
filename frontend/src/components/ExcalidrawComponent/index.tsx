@@ -57,7 +57,7 @@ const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
   useEffect(() => {
     if (currentItem.time) {
       window.electronAPI.send("loadData", currentItem.time);
-      window.electronAPI.receive("loadDataResponse", (data) => {
+      window.electronAPI.once("loadDataResponse", (data) => {
         if (data.error) {
           console.error(data.error);
         } else {

@@ -87,7 +87,7 @@ const Home = () => {
       }
     };
 
-    window.electronAPI.receive("loadDiaryEntriesResponse", handleLoadResponse);
+    window.electronAPI.once("loadDiaryEntriesResponse", handleLoadResponse);
   }, []);
 
   useEffect(() => {

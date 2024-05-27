@@ -94,6 +94,7 @@ const AddModal = ({
 
   // 每次Modal可见时，设置默认值
   useEffect(() => {
+    form.resetFields();
     if (visible) {
       form.setFieldsValue({ color: "#FFA39E" });
     }
