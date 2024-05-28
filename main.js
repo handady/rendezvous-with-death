@@ -3,6 +3,8 @@ const path = require("path");
 const url = require("url");
 const { setupIpcHandlers } = require("./electron/ipcHandlers");
 
+let installPath;
+
 function createWindow() {
   console.log('Creating window...');
   // 创建浏览器窗口
@@ -40,8 +42,9 @@ function createWindow() {
 // Electron 会在初始化后并准备创建浏览器窗口时，调用这个函数。
 // 部分 API 在 ready 事件触发后才能使用。
 app.on("ready", function () {
+  installPath = path.dirname(app.getPath('exe'));
   createWindow();
-  setupIpcHandlers(app);
+  setupIpcHandlers(installPath);
 });
 
 // 当全部窗口关闭时退出。

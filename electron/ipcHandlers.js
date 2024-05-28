@@ -1,12 +1,14 @@
-const { ipcMain } = require("electron");
+const { app, ipcMain } = require("electron");
 const fs = require("fs");
 const path = require("path");
 
-function setupIpcHandlers() {
+function setupIpcHandlers(installPath) {
+  const getInstallPath = (...subPaths) => path.join(installPath, ...subPaths);
+
   // 读取excalidraw文件
   ipcMain.on("loadData", (event, time) => {
     const [year, month, day] = time.split(" ")[0].split("-");
-    const filePath = path.join(__dirname, "data", year, month, `${day}.json`);
+    const filePath = getInstallPath("data", year, month, `${day}.json`);
 
     console.log(`Loading file from: ${filePath}`);
 
@@ -52,10 +54,11 @@ function setupIpcHandlers() {
       }
     });
   });
+
   // 存储excalidraw文件
   ipcMain.on("saveData", (event, time, content) => {
     const [year, month, day] = time.split(" ")[0].split("-");
-    const dirPath = path.join(__dirname, "data", year, month);
+    const dirPath = getInstallPath("data", year, month);
     const filePath = path.join(dirPath, `${day}.json`);
 
     fs.mkdirSync(dirPath, { recursive: true });
@@ -70,14 +73,16 @@ function setupIpcHandlers() {
       event.reply("saveDataResponse", { success: true });
     });
   });
+
   // 存储日记
   ipcMain.on("saveDiaryEntry", (event, entry) => {
-    const filePath = path.join(__dirname, "data", "diary.json");
+    const filePath = getInstallPath("data", "diary.json");
 
     fs.access(filePath, fs.constants.F_OK, (accessErr) => {
       if (accessErr) {
         // 文件不存在，创建并写入初始内容
         const initialData = [entry];
+        fs.mkdirSync(path.dirname(filePath), { recursive: true });
         fs.writeFile(
           filePath,
           JSON.stringify(initialData, null, 2),
@@ -138,9 +143,10 @@ function setupIpcHandlers() {
       }
     });
   });
+
   // 读取日记
   ipcMain.on("loadDiaryEntries", (event) => {
-    const filePath = path.join(__dirname, "data", "diary.json");
+    const filePath = getInstallPath("data", "diary.json");
 
     fs.access(filePath, fs.constants.F_OK, (accessErr) => {
       if (accessErr) {
@@ -172,9 +178,10 @@ function setupIpcHandlers() {
       });
     });
   });
+
   // 更新日记
   ipcMain.on("editDiaryEntry", (event, entry) => {
-    const filePath = path.join(__dirname, "data", "diary.json");
+    const filePath = getInstallPath("data", "diary.json");
 
     fs.access(filePath, fs.constants.F_OK, (accessErr) => {
       if (accessErr) {
@@ -207,7 +214,6 @@ function setupIpcHandlers() {
         }
 
         // 更新日记条目
-        console.log("触发了 editDiaryEntry", entryIndex);
         diaryEntries[entryIndex] = entry;
 
         fs.writeFile(

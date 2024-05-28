@@ -8,7 +8,50 @@
     "start-react": "cd frontend && npm start",
     "start-electron": "echo Waiting for server... && wait-on http://localhost:520 && echo Server is up! && electron .",
     "build-react": "cd frontend && npm run build",
-    "start:electron": "electron ."
+    "start:electron": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.example.arendezvouswithdeath",
+    "productName": "A Rendezvous With Death",
+    "directories": {
+      "output": "dist"
+    },
+    "electronDownload": {
+      "mirror": "https://npmmirror.com/mirrors/electron/"
+    },
+    "files": [
+      "**/*",
+      "front-end/dist/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.icns",
+      "category": "public.app-category.utilities",
+      "entitlements": "build/entitlements.mac.plist",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "build/icons"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": false,
+      "shortcutName": "A Rendezvous With Death"
+    }
   },
   "repository": {
     "type": "git",
@@ -24,6 +67,7 @@
   "devDependencies": {
     "concurrently": "^8.2.2",
     "electron": "^30.0.6",
+    "electron-builder": "^24.13.3",
     "wait-on": "^7.2.0"
   },
   "dependencies": {
