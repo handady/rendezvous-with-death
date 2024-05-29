@@ -55,28 +55,28 @@ const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
   };
 
   useEffect(() => {
-    // if (currentItem.time) {
-    //   window.electronAPI.send("loadData", currentItem.time);
-    //   window.electronAPI.once("loadDataResponse", (data) => {
-    //     if (data.error) {
-    //       console.error(data.error);
-    //     } else {
-    //       const importedData = {
-    //         elements: data.elements || [],
-    //         appState: data.appState || {},
-    //         files: data.files || {},
-    //       };
-    //       setElements(importedData.elements);
-    //       setAppState(importedData.appState);
-    //       setFiles(importedData.files);
-    //       setInitialDataLoaded(true);
-    //     }
-    //   });
-    // }
-    setElements([]);
-    setAppState({});
-    setFiles({});
-    setInitialDataLoaded(true);
+    if (currentItem.time) {
+      window.electronAPI.send("loadData", currentItem.time);
+      window.electronAPI.once("loadDataResponse", (data) => {
+        if (data.error) {
+          console.error(data.error);
+        } else {
+          const importedData = {
+            elements: data.elements || [],
+            appState: data.appState || {},
+            files: data.files || {},
+          };
+          setElements(importedData.elements);
+          setAppState(importedData.appState);
+          setFiles(importedData.files);
+          setInitialDataLoaded(true);
+        }
+      });
+    }
+    // setElements([]);
+    // setAppState({});
+    // setFiles({});
+    // setInitialDataLoaded(true);
   }, [currentItem.time]);
 
   return (
