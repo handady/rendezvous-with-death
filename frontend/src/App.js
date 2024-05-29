@@ -14,14 +14,13 @@ function App() {
         theme={{
           token: {
             colorPrimary: "#f783ac",
-            fontFamily: "YunFengHanChanTi",
+            fontFamily: "Muyao-Softbrush",
             fontSize: 16,
           },
         }}
       >
         <Home />
       </ConfigProvider>
-      {/* <Home /> */}
     </div>
   );
 }
