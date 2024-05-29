@@ -91,24 +91,24 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    // loadData();
-    setLineItems([
-      {
-        title: "黄山市旅游1",
-        color: "#FFA39E",
-        time: "2024-05-25",
-      },
-      {
-        title: "黄山市旅游2",
-        color: "#FFA39E",
-        time: "2024-05-26",
-      },
-      {
-        title: "黄山市旅游3",
-        color: "#FFA39E",
-        time: "2024-05-27",
-      },
-    ]);
+    loadData();
+    // setLineItems([
+    //   {
+    //     title: "黄山市旅游1",
+    //     color: "#FFA39E",
+    //     time: "2024-05-25",
+    //   },
+    //   {
+    //     title: "黄山市旅游2",
+    //     color: "#FFA39E",
+    //     time: "2024-05-26",
+    //   },
+    //   {
+    //     title: "黄山市旅游3",
+    //     color: "#FFA39E",
+    //     time: "2024-05-27",
+    //   },
+    // ]);
     return () => {
       // Cleanup if needed
     };
