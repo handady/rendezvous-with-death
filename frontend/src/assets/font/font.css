@@ -1,9 +1,14 @@
 @font-face {
-    font-family: "caigaobadou";
-    src: url('./caigaobadou.ttf');
+  font-family: "caigaobadou";
+  src: url("./caigaobadou.ttf");
 }
 
 @font-face {
-    font-family: 'heiseqingren';
-    src: url('./heiseqingren.ttf');
+  font-family: "heiseqingren";
+  src: url("./heiseqingren.ttf");
+}
+
+@font-face {
+  font-family: "YunFengHanChanTi";
+  src: url("./YunFengHanChanTi.ttf") format("truetype");
 }

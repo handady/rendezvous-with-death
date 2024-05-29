@@ -45,7 +45,7 @@ p {
 
 body {
   background: #f9f9f9;
-  font-size: 14px;
+  font-size: 16px;
   font-family: Microsoft YaHei, Arial, Helvetica;
   color: #333;
   /* -moz-user-select: none; user-select: none;  */
@@ -104,7 +104,7 @@ input,
 textarea,
 select,
 button {
-  font: 14px Microsoft YaHei, Arial, Helvetica;
+  font: 16px Microsoft YaHei, Arial, Helvetica;
 }
 
 textarea:focus {

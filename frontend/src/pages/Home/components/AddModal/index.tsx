@@ -118,7 +118,7 @@ const AddModal = ({
       footer={null}
       destroyOnClose
     >
-      <Form form={form} name="add_item_form" labelCol={{ span: 4 }}>
+      <Form form={form} name="add_item_form" labelCol={{ span: 5 }}>
         <Form.Item
           name="title"
           label="标题"
