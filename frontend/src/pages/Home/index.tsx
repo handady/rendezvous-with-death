@@ -24,7 +24,7 @@ const Home = () => {
     { color: "blue", time: "2019-11-12", content: "content12" },
   ]);
   const [lineItems, setLineItems] = useState([]) as any; // 日记数据列表
-  const [currentItem, setCurrentItem] = useState({});
+  const [currentItem, setCurrentItem] = useState({}) as any;
   const [currentLineDotItem, setCurrentLineDotItem] = useState({});
   const [dotDiameter, setDotDiameter] = useState(240);
   const [contentDiameter, setContentDiameter] = useState(330);
@@ -94,25 +94,35 @@ const Home = () => {
     loadData();
     // setLineItems([
     //   {
-    //     title: "黄山市旅游1",
-    //     color: "#FFA39E",
-    //     time: "2024-05-25",
+    //     title: "death is waiting",
+    //     color: "#f783ac",
+    //     time: "0000-00-00",
+    //     id: "a rendezous with death",
     //   },
     //   {
-    //     title: "黄山市旅游2",
-    //     color: "#FFA39E",
-    //     time: "2024-05-26",
+    //     title: "最爱的鸡鸡",
+    //     color: "#f783ac",
+    //     time: "2024-05-30",
     //   },
     //   {
-    //     title: "黄山市旅游3",
-    //     color: "#FFA39E",
-    //     time: "2024-05-27",
+    //     title: "最爱的坤坤",
+    //     color: "#f783ac",
+    //     time: "2024-05-31",
     //   },
     // ]);
     return () => {
       // Cleanup if needed
     };
   }, [loadData]);
+
+  useEffect(() => {
+    handleClickItem({
+      title: "death is waiting",
+      color: "#f783ac",
+      time: "0000-00-00",
+      id: "a rendezous with death",
+    });
+  }, []);
 
   return (
     <div id="index" className={styles.index}>
@@ -165,7 +175,12 @@ const Home = () => {
         currentLineDotItem={currentLineDotItem}
       />
       {excalidrawDialogVisible && (
-        <div className={styles["excalidraw-dialog"]}>
+        <div
+          className={styles["excalidraw-dialog"]}
+          style={{
+            display: currentItem.id === "a rendezous with death" ? "none" : "",
+          }}
+        >
           <div
             className={styles["excalidraw-dialog-mask"]}
             onClick={closeDialog}
