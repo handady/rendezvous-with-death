@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { message } from "antd";
 import PropTypes from "prop-types";
 import styles from "./index.module.scss";
-import { Excalidraw, serializeAsJSON } from "@excalidraw/excalidraw";
+import { Excalidraw, serializeAsJSON } from "./excalidraw.development.js";
 
 const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
   const [elements, setElements] = useState([]) as any;
