@@ -39,3 +39,11 @@
     }
   }
 }
+
+.excalidrawInit {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  visibility: hidden;
+  z-index: -1;
+}

@@ -7,6 +7,8 @@ import ExcalidrawComponent from "../../components/ExcalidrawComponent/index.tsx"
 import Sidebar from "../../components/Sidebar/index.tsx";
 import AddModal from "./components/AddModal/index.tsx";
 import styles from "./index.module.scss";
+import { Excalidraw } from "../../components/ExcalidrawComponent/excalidraw.development.js";
+import { initData } from "./initData.js";
 
 const Home = () => {
   const [items, setItems] = useState([
@@ -179,6 +181,16 @@ const Home = () => {
           />
         </div>
       )}
+      <div className={styles["excalidrawInit"]}>
+        <Excalidraw
+          initialData={{
+            elements: (initData as any).elements,
+            appState: (initData as any).appState,
+            files: (initData as any).files,
+            scrollToContent: true,
+          }}
+        ></Excalidraw>
+      </div>
     </div>
   );
 };
