@@ -115,15 +115,6 @@ const Home = () => {
     };
   }, [loadData]);
 
-  useEffect(() => {
-    handleClickItem({
-      title: "death is waiting",
-      color: "#f783ac",
-      time: "0000-00-00",
-      id: "a rendezous with death",
-    });
-  }, []);
-
   return (
     <div id="index" className={styles.index}>
       <div
@@ -175,12 +166,7 @@ const Home = () => {
         currentLineDotItem={currentLineDotItem}
       />
       {excalidrawDialogVisible && (
-        <div
-          className={styles["excalidraw-dialog"]}
-          style={{
-            display: currentItem.id === "a rendezous with death" ? "none" : "",
-          }}
-        >
+        <div className={styles["excalidraw-dialog"]}>
           <div
             className={styles["excalidraw-dialog-mask"]}
             onClick={closeDialog}
