@@ -40,12 +40,14 @@ const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
     if (typeof json === "object") {
       json.appState.scrollX = appState.scrollX;
       json.appState.scrollY = appState.scrollY;
+      json.appState.zoom = appState.zoom;
     } else {
       // 如果json是字符串，则需要解析和重新序列化
       try {
         const parsedJson = JSON.parse(json);
         parsedJson.appState.scrollX = appState.scrollX;
         parsedJson.appState.scrollY = appState.scrollY;
+        parsedJson.appState.zoom = appState.zoom;
         json = JSON.stringify(parsedJson);
       } catch (error) {
         console.error("Error parsing JSON:", error);
