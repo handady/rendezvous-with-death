@@ -2,7 +2,7 @@
   width: 50px;
   position: absolute;
   right: 15px;
-  top: 200px;
+  top: 260px;
   border-radius: 15px;
   z-index: 4;
 }
@@ -11,7 +11,6 @@
   position: relative;
   z-index: 3;
 }
-
 .box li div {
   display: inline-block;
   width: 50px;
@@ -28,7 +27,7 @@
 }
 
 .box li div::before {
-  content: "添加";
+  content: "档案";
   position: absolute;
   top: 0;
   left: 0;

@@ -6,6 +6,7 @@ import LineDots from "./components/LineDot/index.tsx";
 import ExcalidrawComponent from "../../components/ExcalidrawComponent/index.tsx";
 import Sidebar from "../../components/Sidebar/index.tsx";
 import AddModal from "./components/AddModal/index.tsx";
+import InfoModal from "./components/InfoModal/index.tsx";
 import styles from "./index.module.scss";
 import { Excalidraw } from "../../components/ExcalidrawComponent/excalidraw.development.js";
 // import { Excalidraw } from "@excalidraw/excalidraw";
@@ -14,9 +15,6 @@ import {
   calculateDaysUntil72,
   calculateDaysPassed,
 } from "../../utils/functions.ts";
-
-const totalDate = calculateDaysUntil72("2001-01-13");
-const dayPass = calculateDaysPassed("2001-01-13");
 
 const Home = () => {
   const [items, setItems] = useState(initCircleItems);
@@ -32,6 +30,7 @@ const Home = () => {
   const [excalidrawDialogVisible, setexcalidrawDialogVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isAddModal, setIsAddModal] = useState(true); // 是否是添加日记
+  const [progress, setProgress] = useState(0); // 加载进度
 
   const dotRadius = dotDiameter / 2;
   const contentRadius = contentDiameter / 2;
@@ -88,6 +87,23 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    window.electronAPI.send("loadUserInfo");
+    window.electronAPI.once("loadUserInfoResponse", (response) => {
+      if (response.error) {
+        console.error(response.error);
+        message.error(response.error);
+        return;
+      } else {
+        const birthdate = response.data.birthdate;
+        setProgress(
+          (calculateDaysPassed(birthdate) / calculateDaysUntil72(birthdate)) *
+            100
+        );
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     loadData();
     // setLineItems([
     //   {
@@ -136,7 +152,7 @@ const Home = () => {
         <Progress
           style={{ position: "absolute", transform: "translate(-50%,-100%)" }}
           type="circle"
-          percent={(dayPass / totalDate) * 100}
+          percent={progress}
           strokeColor="#f783ac"
           size={dotDiameter + dotSize / 2}
           format={() => ""}
@@ -164,6 +180,7 @@ const Home = () => {
         handleEdit={handleEdit}
       />
       <Sidebar onAddCollection={addItem} />
+      <InfoModal></InfoModal>
       <AddModal
         visible={isModalVisible}
         onCancel={handleCancel}
