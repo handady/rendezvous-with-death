@@ -35,7 +35,22 @@ const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
   }, []);
 
   const saveToFile = () => {
-    const json = serializeAsJSON(elements, appState, files, "local");
+    let json = serializeAsJSON(elements, appState, files, "local") as any;
+    // 检查json是否是对象，并手动添加scrollX和scrollY属性
+    if (typeof json === "object") {
+      json.appState.scrollX = appState.scrollX;
+      json.appState.scrollY = appState.scrollY;
+    } else {
+      // 如果json是字符串，则需要解析和重新序列化
+      try {
+        const parsedJson = JSON.parse(json);
+        parsedJson.appState.scrollX = appState.scrollX;
+        parsedJson.appState.scrollY = appState.scrollY;
+        json = JSON.stringify(parsedJson);
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+      }
+    }
     window.electronAPI.send("saveData", currentItem.time, json);
     window.electronAPI.once("saveDataResponse", (response) => {
       if (response.error) {
