@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { message } from "antd";
+import { message, Progress } from "antd";
 import CircleDots from "./components/CircleDot/index.tsx";
 import CircleContent from "./components/CircleContent/index.tsx";
 import LineDots from "./components/LineDot/index.tsx";
@@ -9,28 +9,22 @@ import AddModal from "./components/AddModal/index.tsx";
 import styles from "./index.module.scss";
 import { Excalidraw } from "../../components/ExcalidrawComponent/excalidraw.development.js";
 // import { Excalidraw } from "@excalidraw/excalidraw";
-import { initData } from "./initData.js";
+import { initData, initCircleItems } from "./initData.js";
+import {
+  calculateDaysUntil72,
+  calculateDaysPassed,
+} from "../../utils/functions.ts";
+
+const totalDate = calculateDaysUntil72("2001-01-13");
+const dayPass = calculateDaysPassed("2001-01-13");
 
 const Home = () => {
-  const [items, setItems] = useState([
-    { color: "rgba(255,105,180)", time: "2019-11-01", content: "content1" },
-    { color: "green", time: "2019-11-02", content: "content2" },
-    { color: "blue", time: "2019-11-03", content: "content3" },
-    { color: "red", time: "2019-11-04", content: "content4" },
-    { color: "green", time: "2019-11-05", content: "content5" },
-    { color: "blue", time: "2019-11-06", content: "content6" },
-    { color: "red", time: "2019-11-07", content: "content7" },
-    { color: "green", time: "2019-11-08", content: "content8" },
-    { color: "blue", time: "2019-11-09", content: "content9" },
-    { color: "red", time: "2019-11-10", content: "content10" },
-    { color: "green", time: "2019-11-11", content: "content11" },
-    { color: "blue", time: "2019-11-12", content: "content12" },
-  ]);
+  const [items, setItems] = useState(initCircleItems);
   const [lineItems, setLineItems] = useState([]) as any; // 日记数据列表
   const [currentItem, setCurrentItem] = useState({}) as any;
   const [currentLineDotItem, setCurrentLineDotItem] = useState({});
   const [dotDiameter, setDotDiameter] = useState(240);
-  const [contentDiameter, setContentDiameter] = useState(330);
+  const [contentDiameter, setContentDiameter] = useState(315);
   const [dotSize, setDotSize] = useState(12);
   const [topDistance, setTopDistance] = useState(70);
   const [circleAngle, setCircleAngle] = useState(0);
@@ -44,8 +38,8 @@ const Home = () => {
   const degreesPerPixel = 30 / (dotSize + dotSpacing);
 
   const handleScrollDistance = (distance) => {
-    const angle = distance * degreesPerPixel;
-    setCircleAngle(angle);
+    // const angle = distance * degreesPerPixel;
+    // setCircleAngle(angle);
   };
 
   // 添加日记
@@ -139,6 +133,15 @@ const Home = () => {
           className={styles.circle}
           style={{ height: `${dotDiameter}px`, width: `${dotDiameter}px` }}
         ></div>
+        <Progress
+          style={{ position: "absolute", transform: "translate(-50%,-100%)" }}
+          type="circle"
+          percent={(dayPass / totalDate) * 100}
+          strokeColor="#f783ac"
+          size={dotDiameter + dotSize / 2}
+          format={() => ""}
+          strokeWidth={3}
+        />
         <CircleDots
           items={items}
           radius={dotRadius}

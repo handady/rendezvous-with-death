@@ -70,3 +70,18 @@ export const initData = {
   appState: { gridSize: null, viewBackgroundColor: "#fdf8f6" },
   files: {},
 };
+
+export const initCircleItems = [
+  { color: "#8A2BE2", time: "12-18岁", content: "暗焰青春" },
+  { color: "#8A2BE2", time: "18-24岁", content: "命运迷途" },
+  { color: "#8A2BE2", time: "24-30岁", content: "魅影红尘" },
+  { color: "#8A2BE2", time: "30-36岁", content: "繁星梦旅" },
+  { color: "#8A2BE2", time: "36-42岁", content: "梦幻盛景" },
+  { color: "#8A2BE2", time: "42-48岁", content: "灵魂莲华" },
+  { color: "#8A2BE2", time: "48-54岁", content: "幽冥之舞" },
+  { color: "#8A2BE2", time: "54-60岁", content: "暮色挽歌" },
+  { color: "#8A2BE2", time: "60-66岁", content: "永夜序曲" },
+  { color: "#8A2BE2", time: "66-72岁", content: "永恒终焉" },
+  { color: "#8A2BE2", time: "0-6岁", content: "幽冥之初" },
+  { color: "#8A2BE2", time: "6-12岁", content: "迷雾晨曦" },
+];

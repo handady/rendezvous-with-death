@@ -17,6 +17,11 @@ function App() {
             fontFamily: "Muyao-Softbrush",
             fontSize: 16,
           },
+          components: {
+            Progress: {
+              remainingColor: "transparent",
+            },
+          },
         }}
       >
         <Home />

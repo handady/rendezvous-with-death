@@ -9,8 +9,8 @@ const CircleDot = ({ items, radius, dotSize = 10, circleAngle = 0 }) => {
     const y = radius * Math.sin(radian) - dotSize / 2;
     return {
       backgroundColor: item.color,
-      width: `${dotSize}px`,
-      height: `${dotSize}px`,
+      width: `${dotSize-2}px`,
+      height: `${dotSize-2}px`,
       transform: `translate(${x}px, ${y}px)`,
     };
   };

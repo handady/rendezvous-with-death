@@ -6,7 +6,7 @@ const CircleContent = ({ items, radius, circleAngle = 0 }) => {
   const dotSize = 30;
 
   const calculateDotStyle = (index) => {
-    const radian = ((index * 30 + circleAngle) * Math.PI) / 180;
+    const radian = ((index * 30 - 15) * Math.PI) / 180;
     const x = radius * Math.cos(radian) - (dotSize * 3) / 2;
     const y = radius * Math.sin(radian) - dotSize / 2;
     return {
