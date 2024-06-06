@@ -3,6 +3,7 @@ import { message } from "antd";
 import PropTypes from "prop-types";
 import styles from "./index.module.scss";
 import { Excalidraw, serializeAsJSON } from "./excalidraw.development.js";
+// import { Excalidraw, serializeAsJSON } from "@excalidraw/excalidraw";
 
 const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
   const [elements, setElements] = useState([]) as any;
@@ -87,7 +88,6 @@ const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
             elements,
             appState,
             files,
-            scrollToContent: true,
           }}
           onChange={handleChange}
           langCode="zh-CN"

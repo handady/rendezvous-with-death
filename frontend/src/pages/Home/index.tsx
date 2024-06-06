@@ -8,6 +8,7 @@ import Sidebar from "../../components/Sidebar/index.tsx";
 import AddModal from "./components/AddModal/index.tsx";
 import styles from "./index.module.scss";
 import { Excalidraw } from "../../components/ExcalidrawComponent/excalidraw.development.js";
+// import { Excalidraw } from "@excalidraw/excalidraw";
 import { initData } from "./initData.js";
 
 const Home = () => {
@@ -169,10 +170,7 @@ const Home = () => {
       />
       {excalidrawDialogVisible && (
         <div className={styles["excalidraw-dialog"]}>
-          <div
-            className={styles["excalidraw-dialog-mask"]}
-            onClick={closeDialog}
-          ></div>
+          <div className={styles["excalidraw-dialog-mask"]}></div>
           <ExcalidrawComponent
             currentItem={currentItem}
             closeDialog={() => {
