@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Input, DatePicker, Radio, message } from "antd";
+import PropTypes from "prop-types";
 import styles from "./index.module.scss"; // 导入Sass文件
 import dayjs from "dayjs";
 
-const InfoModal = () => {
+const InfoModal = ({ loadUserInfo }) => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
 
@@ -15,9 +16,12 @@ const InfoModal = () => {
     form
       .validateFields()
       .then((values) => {
-        values.birthdate = dayjs(values.birthdate).format("YYYY-MM-DD");
         // 转化为Json存储到本地
-        const json = JSON.stringify(values);
+        const json = JSON.stringify({
+          name: values.name,
+          gender: values.gender,
+          birthdate: dayjs(values.birthdate).format("YYYY-MM-DD"),
+        });
         window.electronAPI.send("saveOrUpdateUserInfo", json);
         window.electronAPI.once("saveOrUpdateUserInfoResponse", (response) => {
           if (response.error) {
@@ -26,6 +30,7 @@ const InfoModal = () => {
             return;
           }
           message.success("保存成功");
+          loadUserInfo();
         });
         setVisible(false);
       })
@@ -104,6 +109,10 @@ const InfoModal = () => {
       </Modal>
     </div>
   );
+};
+
+InfoModal.propTypes = {
+  loadUserInfo: PropTypes.func,
 };
 
 export default InfoModal;

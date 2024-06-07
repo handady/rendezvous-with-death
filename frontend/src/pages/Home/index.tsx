@@ -7,6 +7,7 @@ import ExcalidrawComponent from "../../components/ExcalidrawComponent/index.tsx"
 import Sidebar from "../../components/Sidebar/index.tsx";
 import AddModal from "./components/AddModal/index.tsx";
 import InfoModal from "./components/InfoModal/index.tsx";
+import Appointment from "./components/Appointment/index.tsx";
 import styles from "./index.module.scss";
 import { Excalidraw } from "../../components/ExcalidrawComponent/excalidraw.development.js";
 // import { Excalidraw } from "@excalidraw/excalidraw";
@@ -86,7 +87,7 @@ const Home = () => {
     window.electronAPI.once("loadDiaryEntriesResponse", handleLoadResponse);
   }, []);
 
-  useEffect(() => {
+  const loadUserInfo = () => {
     window.electronAPI.send("loadUserInfo");
     window.electronAPI.once("loadUserInfoResponse", (response) => {
       if (response.error) {
@@ -101,6 +102,10 @@ const Home = () => {
         );
       }
     });
+  };
+
+  useEffect(() => {
+    loadUserInfo();
   }, []);
 
   useEffect(() => {
@@ -180,7 +185,8 @@ const Home = () => {
         handleEdit={handleEdit}
       />
       <Sidebar onAddCollection={addItem} />
-      <InfoModal></InfoModal>
+      <InfoModal loadUserInfo={loadUserInfo}></InfoModal>
+      <Appointment></Appointment>
       <AddModal
         visible={isModalVisible}
         onCancel={handleCancel}

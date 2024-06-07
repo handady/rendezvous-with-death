@@ -235,70 +235,43 @@ function setupIpcHandlers(installPath) {
   });
 
   // 存储或修改用户信息
-  ipcMain.on("saveOrUpdateUserInfo", (event, userInfo) => {
+  const saveOrUpdateUserInfo = async (event, userInfo) => {
     const filePath = getInstallPath("data", "user.json");
 
-    fs.access(filePath, fs.constants.F_OK, (accessErr) => {
-      if (accessErr) {
-        // 文件不存在，创建并写入初始内容
-        fs.mkdirSync(path.dirname(filePath), { recursive: true });
-        fs.writeFile(
+    try {
+      await fs.promises.access(filePath, fs.constants.F_OK);
+    } catch (accessErr) {
+      // 文件不存在，创建并写入初始内容
+      try {
+        await fs.promises.mkdir(path.dirname(filePath), { recursive: true });
+        await fs.promises.writeFile(
           filePath,
-          JSON.stringify(userInfo, null, 2),
-          (writeErr) => {
-            if (writeErr) {
-              console.log(`Error writing file: ${writeErr}`);
-              event.reply("saveOrUpdateUserInfoResponse", {
-                error: writeErr.message,
-              });
-              return;
-            }
-            console.log(`Created new file: ${filePath}`);
-            event.reply("saveOrUpdateUserInfoResponse", { success: true });
-          }
+          JSON.stringify(userInfo, null, 2)
         );
-      } else {
-        // 文件存在，读取现有内容并更新内容
-        fs.readFile(filePath, "utf8", (readErr, data) => {
-          if (readErr) {
-            console.log(`Error reading file: ${readErr}`);
-            event.reply("saveOrUpdateUserInfoResponse", {
-              error: readErr.message,
-            });
-            return;
-          }
-
-          let existingUserInfo;
-          try {
-            existingUserInfo = JSON.parse(data);
-          } catch (parseErr) {
-            console.log(`Error parsing JSON: ${parseErr}`);
-            event.reply("saveOrUpdateUserInfoResponse", {
-              error: parseErr.message,
-            });
-            return;
-          }
-
-          // 合并现有用户信息和更新的信息
-          const updatedUserInfo = { ...existingUserInfo, ...userInfo };
-
-          fs.writeFile(
-            filePath,
-            JSON.stringify(updatedUserInfo, null, 2),
-            (writeErr) => {
-              if (writeErr) {
-                console.log(`Error writing file: ${writeErr}`);
-                event.reply("saveOrUpdateUserInfoResponse", {
-                  error: writeErr.message,
-                });
-                return;
-              }
-              event.reply("saveOrUpdateUserInfoResponse", { success: true });
-            }
-          );
+        console.log(`Created new file: ${filePath}`);
+        event.reply("saveOrUpdateUserInfoResponse", { success: true });
+      } catch (writeErr) {
+        console.log(`Error writing file: ${writeErr}`);
+        event.reply("saveOrUpdateUserInfoResponse", {
+          error: writeErr.message,
         });
       }
-    });
+      return;
+    }
+
+    // 文件存在，读取现有内容并更新内容
+    try {
+      await fs.promises.readFile(filePath, "utf8");
+      await fs.promises.writeFile(filePath, JSON.stringify(userInfo, null, 2));
+      event.reply("saveOrUpdateUserInfoResponse", { success: true });
+    } catch (err) {
+      console.log(`Error processing file: ${err}`);
+      event.reply("saveOrUpdateUserInfoResponse", { error: err.message });
+    }
+  };
+
+  ipcMain.on("saveOrUpdateUserInfo", (event, userInfo) => {
+    saveOrUpdateUserInfo(event, userInfo);
   });
 
   // 读取用户信息
@@ -336,6 +309,11 @@ function setupIpcHandlers(installPath) {
         }
       });
     });
+  });
+
+  // 约会
+  ipcMain.on("appointment", (event, data) => {
+    event.reply("appointmentResponse", { success: true });
   });
 }
 
