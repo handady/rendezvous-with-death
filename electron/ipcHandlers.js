@@ -1,6 +1,7 @@
 const { app, ipcMain } = require("electron");
 const fs = require("fs");
 const path = require("path");
+const dayjs = require("dayjs");
 
 function setupIpcHandlers(installPath) {
   const getInstallPath = (...subPaths) => path.join(installPath, ...subPaths);
@@ -313,7 +314,58 @@ function setupIpcHandlers(installPath) {
 
   // 约会
   ipcMain.on("appointment", (event, data) => {
-    event.reply("appointmentResponse", { success: true });
+    // 获取当前天数并且转化为YYYY-MM-DD格式
+    const now = dayjs().format("YYYY-MM-DD");
+    const [year, month, day] = now.split("-");
+
+    const filePath = getInstallPath("data", year, month, `${day}.json`);
+
+    fs.access(filePath, fs.constants.F_OK, (accessErr) => {
+      if (accessErr) {
+        console.log(`File not found: ${filePath}`);
+        event.reply("appointmentResponse", { error: "今天没有可约会的内容" });
+        return;
+      } else {
+        fs.readFile(filePath, "utf8", (readErr, data) => {
+          if (readErr) {
+            console.log(`Error reading file: ${readErr}`);
+            event.reply("appointmentResponse", { error: readErr.message });
+            return;
+          }
+
+          let diaryEntries;
+          let parsedDiaryEntries;
+          try {
+            diaryEntries = JSON.parse(data);
+            if (typeof diaryEntries === "string") {
+              parsedDiaryEntries = JSON.parse(diaryEntries);
+            } else {
+              parsedDiaryEntries = diaryEntries;
+            }
+          } catch (parseErr) {
+            console.log(`Error parsing JSON: ${parseErr}`);
+            event.reply("appointmentResponse", { error: parseErr.message });
+            return;
+          }
+          const resultArray = [];
+          for (let i = 0; i < parsedDiaryEntries.elements.length; i++) {
+            if (parsedDiaryEntries.elements[i].type === "text") {
+              resultArray.push(parsedDiaryEntries.elements[i].text);
+            }
+          }
+          if (resultArray.length > 0) {
+            event.reply("appointmentResponse", {
+              success: true,
+              data: resultArray,
+            });
+          } else {
+            event.reply("appointmentResponse", {
+              error: "今天没有可约会的内容",
+            });
+          }
+        });
+      }
+    });
   });
 }
 
