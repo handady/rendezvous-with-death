@@ -150,7 +150,12 @@ function setupIpcHandlers(installPath) {
         return;
       }
 
-      diaryEntries[entryIndex] = entry;
+      diaryEntries[entryIndex] = {
+        ...diaryEntries[entryIndex],
+        title: entry.title,
+        color: entry.color,
+      };
+
       await writeFile(filePath, diaryEntries);
       event.reply("editDiaryEntryResponse", { success: true });
     } catch (err) {
