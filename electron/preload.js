@@ -13,6 +13,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
       "saveOrUpdateUserInfo",
       "loadUserInfo",
       "appointment",
+      "saveAppointment",
     ];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, ...args);
@@ -41,6 +42,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
       "saveOrUpdateUserInfoResponse",
       "loadUserInfoResponse",
       "appointmentResponse",
+      "saveAppointmentResponse",
     ];
     if (validChannels.includes(channel)) {
       // 从主进程接收
