@@ -32,6 +32,7 @@ const Home = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isAddModal, setIsAddModal] = useState(true); // 是否是添加日记
   const [progress, setProgress] = useState(0); // 加载进度
+  const [dayLeft, setDayLeft] = useState(0); // 剩余天数
 
   const dotRadius = dotDiameter / 2;
   const contentRadius = contentDiameter / 2;
@@ -100,6 +101,8 @@ const Home = () => {
           (calculateDaysPassed(birthdate) / calculateDaysUntil72(birthdate)) *
             100
         );
+        console.log(calculateDaysUntil72(birthdate) - calculateDaysPassed(birthdate));
+        setDayLeft(calculateDaysUntil72(birthdate) - calculateDaysPassed(birthdate));
       }
     });
   };
@@ -123,10 +126,12 @@ const Home = () => {
     //     time: "2024-05-30",
     //   },
     //   {
-    //     title: "最爱的坤坤",
-    //     color: "#f783ac",
-    //     time: "2024-05-31",
-    //   },
+    //     "title": "测试内容0613",
+    //     "color": "#FFA39E",
+    //     "time": "2024-06-13",
+    //     "appointmentTheme": "节流、防抖、输入框实时搜索、窗口大小调整事件、表单验证、滚动事件、高频率点击事件。",
+    //     "appointmentContent": "测试一下"
+    //   }
     // ]);
     return () => {
       // Cleanup if needed
@@ -138,8 +143,8 @@ const Home = () => {
       <div
         className={styles["center-line"]}
         style={{
-          top: `${topDistance}px`,
-          height: `calc(100% - ${topDistance}px)`,
+          top: `${topDistance + dotDiameter}px`,
+          height: `calc(100% - ${topDistance + dotDiameter}px)`,
         }}
       ></div>
       <div
@@ -186,7 +191,7 @@ const Home = () => {
       />
       <Sidebar onAddCollection={addItem} />
       <InfoModal loadUserInfo={loadUserInfo}></InfoModal>
-      <Appointment></Appointment>
+      <Appointment dayLeft={dayLeft}></Appointment>
       <AddModal
         visible={isModalVisible}
         onCancel={handleCancel}

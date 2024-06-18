@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { message, Modal, Form, Input, Button, Collapse } from "antd";
 import styles from "./index.module.scss"; // 导入Sass文件
 
 const { TextArea } = Input;
 
-const Appointment = () => {
+const Appointment = ({ dayLeft = 0 }) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -63,7 +64,11 @@ const Appointment = () => {
   return (
     <div className={styles.sidebar}>
       <div className={styles.box} onClick={appointment}>
-        <li>
+        <div style={{ fontSize: "18px" }}>
+          剩<span style={{ color: "#ed74b1",margin:"0 4px" }}>{dayLeft}</span>天
+        </div>
+        <div style={{ fontSize: "18px" }}>与死亡共偕连理</div>
+        <li style={{ marginTop: "5px" }}>
           <div>约会</div>
         </li>
       </div>
@@ -132,6 +137,10 @@ const Appointment = () => {
       </Modal>
     </div>
   );
+};
+
+Appointment.propTypes = {
+  dayLeft: PropTypes.number,
 };
 
 export default Appointment;
