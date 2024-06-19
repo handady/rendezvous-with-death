@@ -1,0 +1,28 @@
+.inspiration {
+  .inspiration-button {
+    color: rgb(131, 98, 98);
+    transform: translateY(-1px);
+    &:hover {
+      background-color: transparent !important;
+      color: #2f90b9 !important;
+    }
+  }
+}
+.left-ear {
+  position: absolute;
+  background-image: url("./leftEar.png");
+  background-size: 100% 100%;
+  width: 10%;
+  top: 0;
+  left: 0;
+  transform: translate(-33%, -38%) rotate(-30deg);
+}
+.right-ear {
+  position: absolute;
+  background-image: url("./rightEar.png");
+  background-size: 100% 100%;
+  width: 8.3%;
+  top: 0;
+  right: 0;
+  transform: translate(32%, -27%) rotate(18deg);
+}

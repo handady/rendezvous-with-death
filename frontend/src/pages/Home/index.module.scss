@@ -37,6 +37,32 @@
       background-color: rgba(0, 0, 0, 0.5);
       position: absolute;
     }
+
+    .excalidraw-dialog-leftEar {
+      position: absolute;
+      z-index: 6;
+      background-image: url("./leftEar.png");
+      background-size: 100% 100%;
+      width: 4%;
+      top: 10vh;
+      left: 10%;
+      transform: translate(-55%, -26%) rotate(15deg);
+    }
+    .excalidraw-dialog-rightEar {
+      position: absolute;
+      z-index: 6;
+      background-image: url("./rightEar.png");
+      background-size: 100% 100%;
+      width: 3%;
+      top: 10vh;
+      right: 10%;
+      transform: translate(40%, -38%) rotate(24deg);
+    }
+
+    .excalidraw-dialog-rightEar {
+      position: absolute;
+      z-index: 6;
+    }
   }
 }
 

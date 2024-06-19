@@ -38,6 +38,10 @@ const Home = () => {
   const contentRadius = contentDiameter / 2;
   const degreesPerPixel = 30 / (dotSize + dotSpacing);
 
+  // 耳朵数值
+  const leftEarRef = useRef(null) as any;
+  const rightEarRef = useRef(null) as any;
+
   const handleScrollDistance = (distance) => {
     // const angle = distance * degreesPerPixel;
     // setCircleAngle(angle);
@@ -101,8 +105,12 @@ const Home = () => {
           (calculateDaysPassed(birthdate) / calculateDaysUntil72(birthdate)) *
             100
         );
-        console.log(calculateDaysUntil72(birthdate) - calculateDaysPassed(birthdate));
-        setDayLeft(calculateDaysUntil72(birthdate) - calculateDaysPassed(birthdate));
+        console.log(
+          calculateDaysUntil72(birthdate) - calculateDaysPassed(birthdate)
+        );
+        setDayLeft(
+          calculateDaysUntil72(birthdate) - calculateDaysPassed(birthdate)
+        );
       }
     });
   };
@@ -110,6 +118,29 @@ const Home = () => {
   useEffect(() => {
     loadUserInfo();
   }, []);
+
+  useEffect(() => {
+    const setEars = () => {
+      if (leftEarRef.current) {
+        const width = leftEarRef.current.offsetWidth;
+        leftEarRef.current.style.height = `${(width * 22) / 29}px`;
+      }
+
+      if (rightEarRef.current) {
+        const width = rightEarRef.current.offsetWidth;
+        rightEarRef.current.style.height = `${width / 0.8}px`;
+      }
+    };
+
+    if (excalidrawDialogVisible) {
+      setEars();
+
+      window.addEventListener("resize", setEars);
+      return () => {
+        window.removeEventListener("resize", setEars);
+      };
+    }
+  }, [excalidrawDialogVisible]);
 
   useEffect(() => {
     loadData();
@@ -126,12 +157,13 @@ const Home = () => {
     //     time: "2024-05-30",
     //   },
     //   {
-    //     "title": "测试内容0613",
-    //     "color": "#FFA39E",
-    //     "time": "2024-06-13",
-    //     "appointmentTheme": "节流、防抖、输入框实时搜索、窗口大小调整事件、表单验证、滚动事件、高频率点击事件。",
-    //     "appointmentContent": "测试一下"
-    //   }
+    //     title: "测试内容0613",
+    //     color: "#FFA39E",
+    //     time: "2024-06-13",
+    //     appointmentTheme:
+    //       "节流、防抖、输入框实时搜索、窗口大小调整事件、表单验证、滚动事件、高频率点击事件。",
+    //     appointmentContent: "测试一下",
+    //   },
     // ]);
     return () => {
       // Cleanup if needed
@@ -201,6 +233,14 @@ const Home = () => {
       />
       {excalidrawDialogVisible && (
         <div className={styles["excalidraw-dialog"]}>
+          <div
+            className={styles["excalidraw-dialog-leftEar"]}
+            ref={leftEarRef}
+          ></div>
+          <div
+            className={styles["excalidraw-dialog-rightEar"]}
+            ref={rightEarRef}
+          ></div>
           <div className={styles["excalidraw-dialog-mask"]}></div>
           <ExcalidrawComponent
             currentItem={currentItem}

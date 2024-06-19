@@ -3,6 +3,7 @@ import { Button } from "antd";
 import PropTypes from "prop-types";
 import throttle from "lodash/throttle";
 import styles from "./index.module.scss";
+import Inspiration from "./inspiration";
 
 const LineDots = ({
   items,
@@ -134,6 +135,13 @@ const LineDots = ({
               >
                 编辑
               </Button>
+            </div>
+            <div
+              className={`${styles.operationBasic} ${
+                index % 2 === 0 ? styles.inspiration : styles.inspirationOdd
+              }`}
+            >
+              <Inspiration items={item.appointmentTheme} />
             </div>
             <div className={index % 2 === 0 ? styles.right : styles.rightOdd}>
               <div className={styles.content}>{item.title}</div>

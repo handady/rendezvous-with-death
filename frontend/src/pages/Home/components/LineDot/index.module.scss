@@ -25,9 +25,7 @@
         width: 60px;
         position: absolute;
         box-sizing: border-box;
-        // border: 1px solid rgba(197, 197, 197, 1);
         backdrop-filter: blur(3px);
-        background-image: url('./btn.png');
         background-size: 100% 100%;
         transition: all 0.3s ease-in-out;
         &:hover {
@@ -36,9 +34,19 @@
       }
       .operation {
         left: -85px;
+        background-image: url("./btn.png");
       }
       .operationOdd {
         left: 35px;
+        background-image: url("./btn.png");
+      }
+      .inspiration {
+        left: -160px;
+        background-image: url("./inspirationBtn.png");
+      }
+      .inspirationOdd {
+        left: 110px;
+        background-image: url("./inspirationBtn.png");
       }
       .right {
         margin-left: 25px;
