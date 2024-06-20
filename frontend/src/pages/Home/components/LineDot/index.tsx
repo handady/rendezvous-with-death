@@ -141,7 +141,10 @@ const LineDots = ({
                 index % 2 === 0 ? styles.inspiration : styles.inspirationOdd
               }`}
             >
-              <Inspiration items={item.appointmentTheme} />
+              <Inspiration
+                appointmentTheme={item.appointmentTheme}
+                appointmentContent={item.appointmentContent}
+              />
             </div>
             <div className={index % 2 === 0 ? styles.right : styles.rightOdd}>
               <div className={styles.content}>{item.title}</div>

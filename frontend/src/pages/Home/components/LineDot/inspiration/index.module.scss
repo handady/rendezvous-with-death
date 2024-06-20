@@ -26,3 +26,14 @@
   right: 0;
   transform: translate(32%, -27%) rotate(18deg);
 }
+
+.inspiration-content {
+  .tag {
+    margin-bottom: 8px;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+  .selected{
+    border: 2px solid #f783ac;
+  }
+}

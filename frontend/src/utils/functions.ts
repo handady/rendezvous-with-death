@@ -24,7 +24,7 @@ export const formatDate2 = (date: any) => {
 };
 
 // 计算出生日期到72岁有多少天
-export const calculateDaysUntil72 = (birthDate:any) => {
+export const calculateDaysUntil72 = (birthDate: any) => {
   // 使用 moment 解析传入的日期字符串
   const birth = dayjs(birthDate, "YYYY-MM-DD");
 
@@ -59,4 +59,25 @@ export const calculateDaysPassed = (birthDate: any) => {
   const days = now.diff(birth, "days");
 
   return days;
+};
+
+// 分割字符串提取主题
+export const splitTheme = (theme: string) => {
+  // 定义所有可能的分隔符
+  const separators = /[-,，、。？！\s]/g;
+  // 使用正则表达式分割字符串并过滤掉空字符串
+  return theme
+    .split(separators)
+    .filter((item) => item !== "")
+    .map((item) => item.trim());
+};
+
+// 随机生成颜色代码
+export const randomColor = () => {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 };

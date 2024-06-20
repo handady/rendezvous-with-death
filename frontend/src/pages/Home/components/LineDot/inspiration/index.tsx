@@ -1,10 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Button, ConfigProvider, Modal } from "antd";
+import { Button, ConfigProvider, Modal, Tag, Tooltip } from "antd";
 import PropTypes from "prop-types";
 import styles from "./index.module.scss";
+import { splitTheme, randomColor } from "../../../../../utils/functions";
 
-const Inspiration = ({ items }) => {
+const Inspiration = ({ appointmentContent, appointmentTheme }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [theme, setTheme] = useState([]) as any;
+  const [themeColor, setThemeColor] = useState([]) as any;
+  const [selectedTags, setSelectedTags] = useState([]) as any;
   // 耳朵参数
   const leftEarRef = useRef(null) as any;
   const rightEarRef = useRef(null) as any;
@@ -32,6 +36,16 @@ const Inspiration = ({ items }) => {
     },
   };
 
+  const handleTagClick = (tag: string) => {
+    setSelectedTags((prevSelectedTags) => {
+      if (prevSelectedTags.includes(tag)) {
+        return prevSelectedTags.filter((selectedTag) => selectedTag !== tag);
+      } else {
+        return [...prevSelectedTags, tag];
+      }
+    });
+  };
+
   useEffect(() => {
     const setEars = () => {
       if (leftEarRef.current) {
@@ -53,6 +67,18 @@ const Inspiration = ({ items }) => {
       };
     }
   }, [isModalVisible]);
+
+  useEffect(() => {
+    if (appointmentTheme) {
+      const result = splitTheme(appointmentTheme);
+      setTheme(result);
+      const colorArray = [] as any;
+      for (let i = 0; i < result.length; i++) {
+        colorArray.push(randomColor());
+      }
+      setThemeColor(colorArray);
+    }
+  }, [appointmentTheme]);
 
   return (
     <ConfigProvider theme={customTheme}>
@@ -83,9 +109,31 @@ const Inspiration = ({ items }) => {
           okText="确定"
         >
           <div>
-            <p>{items}</p>
+            <div className={styles["inspiration-content"]}>
+              {theme.map((item, index) => (
+                <Tooltip key={index} title={item}>
+                  <Tag
+                    className={`${styles.tag} ${
+                      selectedTags.includes(item) ? styles.selected : ""
+                    }`}
+                    bordered={false}
+                    color={themeColor[index]}
+                    onClick={() => handleTagClick(item)}
+                  >
+                    {item}
+                  </Tag>
+                </Tooltip>
+              ))}
+            </div>
             <div ref={leftEarRef} className={styles["left-ear"]} />
             <div ref={rightEarRef} className={styles["right-ear"]} />
+            <div className={styles["selected-tags"]}>
+              {selectedTags.map((tag, index) => (
+                <Tag key={index} color="pink">
+                  {tag}
+                </Tag>
+              ))}
+            </div>
           </div>
         </Modal>
       </div>
@@ -94,11 +142,8 @@ const Inspiration = ({ items }) => {
 };
 
 Inspiration.propTypes = {
-  items: PropTypes.shape({
-    color: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    time: PropTypes.string.isRequired,
-  }),
+  appointmentContent: PropTypes.string,
+  appointmentTheme: PropTypes.string,
 };
 
 export default Inspiration;

@@ -39,6 +39,16 @@ async function createFileWithDefaultData(filePath, defaultData) {
   await writeFile(filePath, defaultData);
 }
 
+function splitTheme(theme) {
+  // 定义所有可能的分隔符
+  const separators = /[-,，、。？！\s]/g;
+  // 使用正则表达式分割字符串并过滤掉空字符串
+  return theme
+    .split(separators)
+    .filter((item) => item !== "")
+    .map((item) => item.trim());
+}
+
 function setupIpcHandlers(installPath) {
   const getInstallPath = (...subPaths) => path.join(installPath, ...subPaths);
 
@@ -253,7 +263,45 @@ function setupIpcHandlers(installPath) {
       if (targetObject) {
         targetObject.appointmentTheme = content.appointmentTheme;
         targetObject.appointmentContent = content.appointmentContent;
+        const knowledgeSplit = splitTheme(content.appointmentTheme);
         await writeFile(filePath, diaryEntries);
+
+        const knowledgeFilePath = getInstallPath("data", "knowledge.json");
+
+        if (!(await fileExists(knowledgeFilePath))) {
+          // 如果文件不存在，创建一个空文件
+          await createFileWithDefaultData(knowledgeFilePath, []);
+        }
+
+        let knowledgeEntries = await readFile(knowledgeFilePath);
+        // 遍历 knowledgeSplit，更新或添加到 knowledgeEntries
+        knowledgeSplit.forEach((splitItem) => {
+          const existingEntry = knowledgeEntries.find(
+            (entry) => entry.content === splitItem
+          );
+
+          if (existingEntry) {
+            // 检查最后修改时间
+            if (dayjs(existingEntry.lastModified).isSame(now, "day")) {
+              // 如果时间相同，不增加权重
+              return;
+            } else {
+              // 如果时间不同，增加权重，并更新最后修改时间
+              existingEntry.weight += 1;
+              existingEntry.lastModified = now;
+            }
+          } else {
+            // 添加新的知识点，设置权重为1，并设置最后修改时间
+            knowledgeEntries.push({
+              content: splitItem,
+              weight: 1,
+              lastModified: now,
+            });
+          }
+        });
+
+        await writeFile(knowledgeFilePath, knowledgeEntries);
+
         event.reply("saveAppointmentResponse", { success: true });
       } else {
         event.reply("saveAppointmentResponse", {
