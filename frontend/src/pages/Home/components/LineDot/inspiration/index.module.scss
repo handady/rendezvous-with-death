@@ -33,7 +33,44 @@
     box-sizing: border-box;
     cursor: pointer;
   }
-  .selected{
+  .selected {
     border: 2px solid #f783ac;
+  }
+}
+.selected-tags-container {
+  display: flex;
+  align-items: center;
+  .selected-tags {
+    background-image: url("./tagContainer.png");
+    background-size: 100% 100%;
+    display: inline-flex;
+    max-width: 300px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 25px 25px;
+  }
+  .inspiration-button {
+    background-image: url("./inspirationBtn.png");
+    background-size: 100% 100%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 12px;
+    margin-top: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.inspiration-result {
+  display: flex;
+  .inspiration-item{
+    margin-right: 6px;
   }
 }

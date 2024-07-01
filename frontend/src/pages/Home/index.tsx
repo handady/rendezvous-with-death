@@ -223,7 +223,7 @@ const Home = () => {
       />
       <Sidebar onAddCollection={addItem} />
       <InfoModal loadUserInfo={loadUserInfo}></InfoModal>
-      <Appointment dayLeft={dayLeft}></Appointment>
+      <Appointment loadData={loadData} dayLeft={dayLeft}></Appointment>
       <AddModal
         visible={isModalVisible}
         onCancel={handleCancel}

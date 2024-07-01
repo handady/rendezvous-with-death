@@ -5,7 +5,7 @@ import styles from "./index.module.scss"; // 导入Sass文件
 
 const { TextArea } = Input;
 
-const Appointment = ({ dayLeft = 0 }) => {
+const Appointment = ({ dayLeft = 0, loadData }) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -52,6 +52,7 @@ const Appointment = ({ dayLeft = 0 }) => {
             return;
           }
           message.success("保存成功");
+          loadData();
           setVisible(false);
         });
       })
@@ -65,7 +66,8 @@ const Appointment = ({ dayLeft = 0 }) => {
     <div className={styles.sidebar}>
       <div className={styles.box} onClick={appointment}>
         <div style={{ fontSize: "18px" }}>
-          剩<span style={{ color: "#ed74b1",margin:"0 4px" }}>{dayLeft}</span>天
+          剩<span style={{ color: "#ed74b1", margin: "0 4px" }}>{dayLeft}</span>
+          天
         </div>
         <div style={{ fontSize: "18px" }}>与死亡共偕连理</div>
         <li style={{ marginTop: "5px" }}>
@@ -95,7 +97,7 @@ const Appointment = ({ dayLeft = 0 }) => {
               items={[
                 {
                   key: "1",
-                  label: "今日内容",
+                  label: "今日内容(请从以下内容中提取关键词，并用逗号隔开：)",
                   children: (
                     <>
                       {collapseText.map((item, index) => (
@@ -141,6 +143,7 @@ const Appointment = ({ dayLeft = 0 }) => {
 
 Appointment.propTypes = {
   dayLeft: PropTypes.number,
+  loadData: PropTypes.func,
 };
 
 export default Appointment;

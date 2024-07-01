@@ -258,60 +258,121 @@ function setupIpcHandlers(installPath) {
 
     try {
       const diaryEntries = await readFile(filePath);
-      const targetObject = diaryEntries.find((item) => item.time === now);
 
-      if (targetObject) {
-        targetObject.appointmentTheme = content.appointmentTheme;
-        targetObject.appointmentContent = content.appointmentContent;
-        const knowledgeSplit = splitTheme(content.appointmentTheme);
-        await writeFile(filePath, diaryEntries);
+      // 删除所有当天的内容
+      const updatedDiaryEntries = diaryEntries.filter(
+        (item) => item.time !== now
+      );
 
-        const knowledgeFilePath = getInstallPath("data", "knowledge.json");
+      // 添加新的内容
+      const newEntry = {
+        time: now,
+        appointmentTheme: content.appointmentTheme,
+        appointmentContent: content.appointmentContent,
+      };
+      updatedDiaryEntries.push(newEntry);
 
-        if (!(await fileExists(knowledgeFilePath))) {
-          // 如果文件不存在，创建一个空文件
-          await createFileWithDefaultData(knowledgeFilePath, []);
-        }
+      await writeFile(filePath, updatedDiaryEntries);
 
-        let knowledgeEntries = await readFile(knowledgeFilePath);
-        // 遍历 knowledgeSplit，更新或添加到 knowledgeEntries
-        knowledgeSplit.forEach((splitItem) => {
-          const existingEntry = knowledgeEntries.find(
-            (entry) => entry.content === splitItem
-          );
+      const knowledgeFilePath = getInstallPath("data", "knowledge.json");
 
-          if (existingEntry) {
-            // 检查最后修改时间
-            if (dayjs(existingEntry.lastModified).isSame(now, "day")) {
-              // 如果时间相同，不增加权重
-              return;
-            } else {
-              // 如果时间不同，增加权重，并更新最后修改时间
-              existingEntry.weight += 1;
-              existingEntry.lastModified = now;
-            }
-          } else {
-            // 添加新的知识点，设置权重为1，并设置最后修改时间
-            knowledgeEntries.push({
-              content: splitItem,
-              weight: 1,
-              lastModified: now,
-            });
-          }
-        });
-
-        await writeFile(knowledgeFilePath, knowledgeEntries);
-
-        event.reply("saveAppointmentResponse", { success: true });
-      } else {
-        event.reply("saveAppointmentResponse", {
-          error: "未找到对应的日记条目",
-        });
+      if (!(await fileExists(knowledgeFilePath))) {
+        // 如果文件不存在，创建一个空文件
+        await createFileWithDefaultData(knowledgeFilePath, []);
       }
+
+      let knowledgeEntries = await readFile(knowledgeFilePath);
+      const knowledgeSplit = splitTheme(content.appointmentTheme);
+
+      // 遍历 knowledgeSplit，更新或添加到 knowledgeEntries
+      knowledgeSplit.forEach((splitItem) => {
+        const existingEntry = knowledgeEntries.find(
+          (entry) => entry.content === splitItem
+        );
+
+        if (existingEntry) {
+          // 检查最后修改时间
+          if (dayjs(existingEntry.lastModified).isSame(now, "day")) {
+            // 如果时间相同，不增加权重
+            return;
+          } else {
+            // 如果时间不同，增加权重，并更新最后修改时间
+            existingEntry.weight += 1;
+            existingEntry.lastModified = now;
+          }
+        } else {
+          // 添加新的知识点，设置权重为1，并设置最后修改时间
+          knowledgeEntries.push({
+            content: splitItem,
+            weight: 1,
+            lastModified: now,
+          });
+        }
+      });
+
+      await writeFile(knowledgeFilePath, knowledgeEntries);
+
+      event.reply("saveAppointmentResponse", { success: true });
     } catch (err) {
       console.log(`Error: ${err}`);
       event.reply("saveAppointmentResponse", { error: err.message });
     }
+  });
+
+  // 生成灵感
+  ipcMain.on("generateInspiration", (event, tags) => {
+    function getRandomWeightedItem(items) {
+      const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
+      const randomWeight = Math.random() * totalWeight;
+
+      let currentWeight = 0;
+      for (const item of items) {
+        currentWeight += item.weight;
+        if (currentWeight >= randomWeight) {
+          return item;
+        }
+      }
+    }
+
+    function getThreeRandomWeightedItems(knowledgeEntries, selectedTags) {
+      const filteredEntries = knowledgeEntries.filter(
+        (entry) => !selectedTags.includes(entry.content)
+      );
+
+      const selectedItems = [];
+      for (let i = 0; i < 3; i++) {
+        const item = getRandomWeightedItem(filteredEntries);
+        if (item) {
+          selectedItems.push(item);
+          // Remove the selected item from the list to avoid duplicates
+          const index = filteredEntries.indexOf(item);
+          if (index > -1) {
+            filteredEntries.splice(index, 1);
+          }
+        }
+      }
+
+      return selectedItems.map((item) => item.content);
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+    // 读取knowledge.json文件
+    const knowledgeFilePath = getInstallPath("data", "knowledge.json");
+    readFile(knowledgeFilePath).then((data) => {
+      const additionalTags = getThreeRandomWeightedItems(data, tags);
+      const newSelectedTags = [...tags, ...additionalTags];
+      shuffleArray(newSelectedTags);
+
+      event.reply("generateInspirationResponse", {
+        success: true,
+        data: newSelectedTags,
+      });
+    });
   });
 }
 

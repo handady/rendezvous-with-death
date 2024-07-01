@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Button } from "antd";
+import { Button, Tooltip } from "antd";
 import PropTypes from "prop-types";
 import throttle from "lodash/throttle";
 import styles from "./index.module.scss";

@@ -3,7 +3,7 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: 142px;
+  top: 143px;
   border-radius: 15px;
   z-index: 4;
 }
@@ -14,16 +14,17 @@
 }
 .box li div {
   display: inline-block;
-  width: 71.5px;
-  height: 61.6px;
+  width: 66px;
+  height: 62px;
   background-image: url('./btn.png');
   background-size: 100% 100%;
   text-align: center;
-  line-height: 62px;
+  line-height: 64px;
   border-radius: 10px;
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease-in-out; /* 仅针对文字颜色进行过渡 */
+  margin-top: 1px;
 
   &:hover {
     transform: scale(1.1);
