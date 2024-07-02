@@ -220,6 +220,7 @@ const Home = () => {
         onScrollDistance={handleScrollDistance}
         onClickItem={handleClickItem}
         handleEdit={handleEdit}
+        loadData={loadData}
       />
       <Sidebar onAddCollection={addItem} />
       <InfoModal loadUserInfo={loadUserInfo}></InfoModal>

@@ -374,6 +374,25 @@ function setupIpcHandlers(installPath) {
       });
     });
   });
+
+  // 存储灵感
+  ipcMain.on("saveInspiration", (event, content) => {
+    const filePath = getInstallPath("data", "diary.json");
+    readFile(filePath).then((data) => {
+      const updatedDiaryEntries = data.map((entry) => {
+        if (dayjs(entry.time).isSame(content.time, "day")) {
+          return {
+            ...entry,
+            inspirationContent: content.content,
+          };
+        }
+        return entry;
+      });
+      writeFile(filePath, updatedDiaryEntries).then(() => {
+        event.reply("saveInspirationResponse", { success: true });
+      });
+    });
+  });
 }
 
 module.exports = { setupIpcHandlers };

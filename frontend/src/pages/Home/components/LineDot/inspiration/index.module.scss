@@ -70,7 +70,11 @@
 
 .inspiration-result {
   display: flex;
-  .inspiration-item{
+  .inspiration-item {
     margin-right: 6px;
   }
+}
+
+:global(.ant-empty-normal) {
+  margin-block: 0px;
 }

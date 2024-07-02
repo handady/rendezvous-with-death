@@ -13,6 +13,7 @@ const LineDots = ({
   onClickItem,
   onScrollDistance,
   handleEdit,
+  loadData,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [startY, setStartY] = useState(0);
@@ -144,11 +145,16 @@ const LineDots = ({
               <Inspiration
                 appointmentTheme={item.appointmentTheme}
                 appointmentContent={item.appointmentContent}
+                inspirationContent={item.inspirationContent}
+                appointmentTime={item.time}
+                loadData={loadData}
               />
             </div>
             <div className={index % 2 === 0 ? styles.right : styles.rightOdd}>
-              <div className={styles.content}>{item.title}</div>
-              <div className={styles.time}>{item.time}</div>
+              <Tooltip title={item.appointmentContent} color="#f5347f">
+                <div className={styles.content}>{item.title}</div>
+                <div className={styles.time}>{item.time}</div>
+              </Tooltip>
             </div>
           </div>
         ))}
@@ -171,6 +177,7 @@ LineDots.propTypes = {
   onClickItem: PropTypes.func.isRequired,
   onScrollDistance: PropTypes.func.isRequired,
   handleEdit: PropTypes.func.isRequired,
+  loadData: PropTypes.func.isRequired,
 };
 
 export default LineDots;
