@@ -259,20 +259,23 @@ function setupIpcHandlers(installPath) {
     try {
       const diaryEntries = await readFile(filePath);
 
-      // 删除所有当天的内容
-      const updatedDiaryEntries = diaryEntries.filter(
-        (item) => item.time !== now
-      );
+      // 查找当天的条目
+      let targetObject = diaryEntries.find((item) => item.time === now);
 
-      // 添加新的内容
-      const newEntry = {
-        time: now,
-        appointmentTheme: content.appointmentTheme,
-        appointmentContent: content.appointmentContent,
-      };
-      updatedDiaryEntries.push(newEntry);
+      if (targetObject) {
+        // 修改当天条目的指定属性
+        targetObject.appointmentTheme = content.appointmentTheme;
+        targetObject.appointmentContent = content.appointmentContent;
+        targetObject.time = now; // 确保 time 也被更新
 
-      await writeFile(filePath, updatedDiaryEntries);
+        // 写入更新后的内容到文件
+        await writeFile(filePath, diaryEntries);
+      } else {
+        event.reply("saveAppointmentResponse", {
+          error: "今天没有可约会的内容",
+        });
+        return;
+      }
 
       const knowledgeFilePath = getInstallPath("data", "knowledge.json");
 

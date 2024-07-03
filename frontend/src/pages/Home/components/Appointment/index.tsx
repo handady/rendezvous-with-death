@@ -84,6 +84,7 @@ const Appointment = ({ dayLeft = 0, loadData }) => {
         }}
         footer={null}
         destroyOnClose
+        width={"40%"}
       >
         <Form
           form={form}

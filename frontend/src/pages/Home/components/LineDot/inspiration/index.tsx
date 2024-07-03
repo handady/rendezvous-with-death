@@ -182,7 +182,7 @@ const Inspiration = ({
           name={["inspirationTable", index, "inspiration"]}
           rules={[{ required: true, message: "请填写灵感" }]}
         >
-          <TextArea />
+          <TextArea autoSize={{ minRows: 2 }} />
         </Form.Item>
       ),
     },
@@ -195,7 +195,7 @@ const Inspiration = ({
           name={["inspirationTable", index, "inspirationSource"]}
           rules={[{ required: true, message: "请填写灵感来源" }]}
         >
-          <TextArea />
+          <TextArea autoSize={{ minRows: 2 }} />
         </Form.Item>
       ),
     },
@@ -234,6 +234,7 @@ const Inspiration = ({
               : null
           }
           color="#34aef5"
+          overlayStyle={{ maxWidth: 800 }}
         >
           <Button
             type="text"

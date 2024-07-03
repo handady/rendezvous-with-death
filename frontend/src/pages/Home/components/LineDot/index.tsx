@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import throttle from "lodash/throttle";
 import styles from "./index.module.scss";
 import Inspiration from "./inspiration";
+import ReactMarkdown from "react-markdown";
 
 const LineDots = ({
   items,
@@ -151,7 +152,17 @@ const LineDots = ({
               />
             </div>
             <div className={index % 2 === 0 ? styles.right : styles.rightOdd}>
-              <Tooltip title={item.appointmentContent} color="#f5347f">
+              <Tooltip
+                title={
+                  item.appointmentContent && (
+                    <div style={{ whiteSpace: "pre-wrap" }}>
+                      <ReactMarkdown>{item.appointmentContent}</ReactMarkdown>
+                    </div>
+                  )
+                }
+                color="#f5347f"
+                overlayStyle={{ maxWidth: 800 }}
+              >
                 <div className={styles.content}>{item.title}</div>
                 <div className={styles.time}>{item.time}</div>
               </Tooltip>
