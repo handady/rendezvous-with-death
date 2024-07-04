@@ -16,6 +16,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
       "saveAppointment",
       "generateInspiration",
       "saveInspiration",
+      "getBuffs",
     ];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, ...args);
@@ -47,6 +48,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
       "saveAppointmentResponse",
       "generateInspirationResponse",
       "saveInspirationResponse",
+      "getBuffsResponse",
     ];
     if (validChannels.includes(channel)) {
       // 从主进程接收

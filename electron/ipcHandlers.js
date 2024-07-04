@@ -315,6 +315,8 @@ function setupIpcHandlers(installPath) {
 
       await writeFile(knowledgeFilePath, knowledgeEntries);
 
+      updateBuffs(event);
+
       event.reply("saveAppointmentResponse", { success: true });
     } catch (err) {
       console.log(`Error: ${err}`);
@@ -393,6 +395,96 @@ function setupIpcHandlers(installPath) {
       });
       writeFile(filePath, updatedDiaryEntries).then(() => {
         event.reply("saveInspirationResponse", { success: true });
+      });
+    });
+  });
+
+  // 更新buffs
+  const updateBuffs = async (event) => {
+    const buffsFilePath = getInstallPath("data", "buffs.json");
+    const keywordsFilePath = getInstallPath("data", "knowledge.json");
+
+    // 计算buff的经验值
+    const calculateBuffExperience = (buff, knowledgeEntries) => {
+      let experience = 0;
+      buff.keywords.forEach((buffKeyword) => {
+        knowledgeEntries.forEach((knowledgeEntry) => {
+          if (buffKeyword.keyword === knowledgeEntry.content) {
+            experience += buffKeyword.weight * knowledgeEntry.weight;
+          }
+        });
+      });
+      return experience;
+    };
+
+    try {
+      const buffsData = await readFile(buffsFilePath);
+      const keywordsData = await readFile(keywordsFilePath);
+
+      const buffsWithExperience = buffsData.map((buff) => {
+        const experience = calculateBuffExperience(buff, keywordsData);
+        return {
+          ...buff,
+          experience,
+        };
+      });
+
+      await writeFile(buffsFilePath, buffsWithExperience);
+
+      event.reply("getBuffsResponse", {
+        success: true,
+        data: buffsWithExperience,
+      });
+    } catch (err) {
+      console.error(`Error: ${err}`);
+      event.reply("getBuffsResponse", {
+        success: false,
+        error: err.message,
+      });
+    }
+  };
+
+  // 获取所有有等级的buff
+  ipcMain.on("getBuffs", (event) => {
+    const buffsFilePath = getInstallPath("data", "buffs.json");
+    const getBuffsWithExperience = (buffs, minExperience) => {
+      return buffs
+        .filter((buff) => buff.experience >= minExperience)
+        .map((buff) => {
+          // 找到当前经验值对应的level
+          const currentLevel = buff.levels.reduce((current, level) => {
+            return buff.experience >= level.required_experience
+              ? level
+              : current;
+          }, buff.levels[0]);
+
+          // 找到下一级所需的经验值
+          const nextLevelIndex = buff.levels.findIndex(
+            (level) =>
+              level.required_experience > currentLevel.required_experience
+          );
+          const nextLevelExperience =
+            nextLevelIndex !== -1
+              ? buff.levels[nextLevelIndex].required_experience
+              : currentLevel.required_experience;
+          
+          return {
+            name: buff.name,
+            experience: buff.experience,
+            level: currentLevel,
+            nextLevelExperience: nextLevelExperience,
+            imagePath: getInstallPath(
+              "data/buffs",
+              `${buff.name + currentLevel.level}.webp`
+            ),
+          };
+        });
+    };
+    readFile(buffsFilePath).then((data) => {
+      const buffsWithExperience = getBuffsWithExperience(data, 1);
+      event.reply("getBuffsResponse", {
+        success: true,
+        data: buffsWithExperience,
       });
     });
   });

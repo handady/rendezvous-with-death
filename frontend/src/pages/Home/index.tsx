@@ -8,6 +8,7 @@ import Sidebar from "../../components/Sidebar/index.tsx";
 import AddModal from "./components/AddModal/index.tsx";
 import InfoModal from "./components/InfoModal/index.tsx";
 import Appointment from "./components/Appointment/index.tsx";
+import Buffs from "./components/Buffs/index.tsx";
 import styles from "./index.module.scss";
 import { Excalidraw } from "../../components/ExcalidrawComponent/excalidraw.development.js";
 // import { Excalidraw } from "@excalidraw/excalidraw";
@@ -33,6 +34,7 @@ const Home = () => {
   const [isAddModal, setIsAddModal] = useState(true); // 是否是添加日记
   const [progress, setProgress] = useState(0); // 加载进度
   const [dayLeft, setDayLeft] = useState(0); // 剩余天数
+  const [buffs, setBuffs] = useState([]) as any; // 祝福列表
 
   const dotRadius = dotDiameter / 2;
   const contentRadius = contentDiameter / 2;
@@ -111,6 +113,15 @@ const Home = () => {
         setDayLeft(
           calculateDaysUntil72(birthdate) - calculateDaysPassed(birthdate)
         );
+      }
+    });
+    window.electronAPI.send("getBuffs");
+    window.electronAPI.once("getBuffsResponse", (response) => {
+      if (response.error) {
+        message.error(response.error);
+        return;
+      } else {
+        setBuffs(response.data);
       }
     });
   };
@@ -222,6 +233,7 @@ const Home = () => {
         handleEdit={handleEdit}
         loadData={loadData}
       />
+      <Buffs buffs={buffs} />
       <Sidebar onAddCollection={addItem} />
       <InfoModal loadUserInfo={loadUserInfo}></InfoModal>
       <Appointment loadData={loadData} dayLeft={dayLeft}></Appointment>
