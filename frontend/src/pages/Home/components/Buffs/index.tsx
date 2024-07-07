@@ -51,7 +51,7 @@ const Buffs = ({ buffs }) => {
               className={styles["buff-image"]}
               src={buff.imagePath}
               preview={false}
-              width={50}
+              width={32}
             />
           </Tooltip>
         </div>

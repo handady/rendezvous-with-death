@@ -6,6 +6,7 @@ import LineDots from "./components/LineDot/index.tsx";
 import ExcalidrawComponent from "../../components/ExcalidrawComponent/index.tsx";
 import Sidebar from "../../components/Sidebar/index.tsx";
 import AddModal from "./components/AddModal/index.tsx";
+import GoChallenge from "./components/GoChallenge/index.tsx";
 import InfoModal from "./components/InfoModal/index.tsx";
 import Appointment from "./components/Appointment/index.tsx";
 import Buffs from "./components/Buffs/index.tsx";
@@ -244,6 +245,7 @@ const Home = () => {
         isAddModal={isAddModal}
         currentLineDotItem={currentLineDotItem}
       />
+      <GoChallenge></GoChallenge>
       {excalidrawDialogVisible && (
         <div className={styles["excalidraw-dialog"]}>
           <div

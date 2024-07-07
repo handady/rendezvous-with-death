@@ -89,6 +89,7 @@ const AddModal = ({
       })
       .catch((info) => {
         console.log("Validate Failed:", info);
+        setSubmitLoading(false);
       });
   };
 

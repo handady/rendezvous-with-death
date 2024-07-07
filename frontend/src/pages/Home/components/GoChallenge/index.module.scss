@@ -2,7 +2,7 @@
   width: 50px;
   position: absolute;
   right: 15px;
-  top: 260px;
+  top: 321px;
   border-radius: 15px;
   z-index: 4;
 }
@@ -11,6 +11,7 @@
   position: relative;
   z-index: 3;
 }
+
 .box li div {
   display: inline-block;
   width: 50px;
@@ -27,7 +28,7 @@
 }
 
 .box li div::before {
-  content: "状态";
+  content: "挑战";
   position: absolute;
   top: 0;
   left: 0;
@@ -56,30 +57,4 @@
   width: 60px;
   top: -47px;
   right: 0px;
-}
-
-.modal-footer {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-
-  .closeBtn {
-    background-color: #bfefff;
-    border: 0;
-    width: 30%;
-    margin-right: 15px;
-  }
-  .closeBtn:hover {
-    background-color: #00bfff !important;
-    color: white !important;
-  }
-  .submitBtn {
-    background-color: #fec2d6;
-    border: 0;
-    width: 30%;
-  }
-  .submitBtn:hover {
-    background-color: #f5347f !important;
-    color: white !important;
-  }
 }

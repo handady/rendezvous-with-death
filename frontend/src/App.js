@@ -1,7 +1,9 @@
 // src/App.js
 
 import React from "react";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home/index.tsx";
+import Challenge from "./pages/Challenge/index.tsx";
 import "./App.css";
 import "./styles/common.css";
 import "./assets/font/font.css";
@@ -24,7 +26,12 @@ function App() {
           },
         }}
       >
-        <Home />
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/challenge" element={<Challenge />} />
+          </Routes>
+        </Router>
       </ConfigProvider>
     </div>
   );
