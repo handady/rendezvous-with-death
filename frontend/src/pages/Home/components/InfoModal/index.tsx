@@ -11,79 +11,11 @@ import {
 } from "antd";
 import PropTypes from "prop-types";
 import styles from "./index.module.scss"; // 导入Sass文件
+import {
+  calculateAttributes,
+  calculateAttributes1,
+} from "../../../../utils/functions";
 import dayjs from "dayjs";
-
-const calculateAttributes = (attributes) => {
-  const calculated = {
-    血量: 0,
-    精力: 0,
-    专注值: 0,
-    物理攻击力: 0,
-    属性攻击力: 0,
-    物理抗性: 0,
-    属性抗性: 0,
-    闪避: 0,
-  };
-
-  // 生命力
-  calculated.血量 += attributes.生命力 * 10;
-  calculated.物理抗性 += attributes.生命力 * 1;
-
-  // 集中力
-  calculated.专注值 += attributes.集中力 * 10;
-  calculated.属性攻击力 += attributes.集中力 * 2;
-
-  // 耐力
-  calculated.精力 += attributes.耐力 * 10;
-  calculated.物理抗性 += attributes.耐力 * 1;
-  calculated.属性抗性 += attributes.耐力 * 0.5;
-
-  // 力气
-  calculated.物理攻击力 += attributes.力气 * 2;
-
-  // 灵巧
-  calculated.闪避 += attributes.灵巧 * 1;
-
-  // 智力
-  calculated.属性攻击力 += attributes.智力 * 2;
-
-  // 信仰
-  calculated.属性抗性 += attributes.信仰 * 1;
-
-  // 感应
-  calculated.物理抗性 += attributes.感应 * 0.5;
-  calculated.物理攻击力 += attributes.感应 * 0.5;
-  calculated.闪避 += attributes.感应 * 0.5;
-
-  return calculated;
-};
-
-const calculateAttributes1 = (attributes) => {
-  const calculated = {
-    命中: 0,
-  };
-
-  // 生命力
-
-  // 集中力
-
-  // 耐力
-
-  // 力气
-
-  // 灵巧
-  calculated.命中 += attributes.灵巧 * 5;
-
-  // 智力
-  calculated.命中 += attributes.智力 * 2;
-
-  // 信仰
-
-  // 感应
-  calculated.命中 += attributes.感应 * 3;
-
-  return calculated;
-};
 
 const InfoModal = ({ loadUserInfo }) => {
   const [visible, setVisible] = useState(false);

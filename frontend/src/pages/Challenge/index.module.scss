@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  .opponent {
+    background-color: #eec1c1;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    &:hover {
+      background-color: #f1d2d7;
+    }
+  }
+}
+
+.challengContent {
+  display: flex;
+  .us {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .vs {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .opponent {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+}
