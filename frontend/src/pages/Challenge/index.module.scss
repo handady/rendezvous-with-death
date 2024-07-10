@@ -27,6 +27,19 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+    .vsBattle {
+      display: inline-flex;
+      width: 25%;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      background-color: #eec1c1;
+      padding: 5px 10px;
+      border-radius: 4px;
+      &:hover {
+        background-color: #f1d2d7;
+      }
+    }
   }
   .opponent {
     display: flex;

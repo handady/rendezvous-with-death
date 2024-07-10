@@ -467,17 +467,23 @@ function setupIpcHandlers(installPath) {
             nextLevelIndex !== -1
               ? buff.levels[nextLevelIndex].required_experience
               : currentLevel.required_experience;
-          
-          return {
+
+          const result = {
             name: buff.name,
             experience: buff.experience,
             level: currentLevel,
             nextLevelExperience: nextLevelExperience,
             imagePath: getInstallPath(
               "data/buffs",
-              `${buff.name + currentLevel.level}.webp`
+              `${buff.name + currentLevel.level}.${currentLevel.image_type}`
             ),
           };
+
+          result.level.effects.forEach((effect) => {
+            effect.name = result.name;
+          });
+
+          return result;
         });
     };
     readFile(buffsFilePath).then((data) => {

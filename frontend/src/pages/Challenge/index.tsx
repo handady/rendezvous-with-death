@@ -16,6 +16,8 @@ const Challenge = () => {
     name: "",
     attributes: {},
   });
+  const [buffs, setBuffs] = useState([]) as any;
+  const [opponentBuffs, setOpponentBuffs] = useState([]) as any;
   const [calculateAttributesInfo, setCalculateAttributesInfo] = useState({});
   const [calculateAttributesInfo1, setCalculateAttributesInfo1] = useState({});
   const [opponentUserInfo, setOpponentUserInfo] = useState({
@@ -43,20 +45,41 @@ const Challenge = () => {
     setVisible(true);
   };
 
+  const updateUserStatus = (newStatus) => {
+    setCalculateAttributesInfo((prevState) => ({
+      ...prevState,
+      血量: newStatus.血量,
+    }));
+  };
+
+  const updateOpponentStatus = (newStatus) => {
+    setOpponentCalculateAttributesInfo((prevState) => ({
+      ...prevState,
+      血量: newStatus.血量,
+    }));
+  };
+
   const startBattle = () => {
+    setBattleLog([]);
     battle(
       {
+        name: userInfo.name,
         ...userInfo.attributes,
         ...calculateAttributesInfo,
         ...calculateAttributesInfo1,
       },
       {
+        name: opponentUserInfo.name,
         ...opponentUserInfo.attributes,
         ...opponentCalculateAttributesInfo,
         ...opponentCalculateAttributesInfo1,
       },
+      buffs,
+      opponentBuffs,
       setBattleLog,
-      setWinner
+      setWinner,
+      updateUserStatus,
+      updateOpponentStatus
     );
   };
 
@@ -75,6 +98,15 @@ const Challenge = () => {
           setCalculateAttributesInfo1(
             calculateAttributes1(response.data.attributes)
           );
+        }
+      });
+      window.electronAPI.send("getBuffs");
+      window.electronAPI.once("getBuffsResponse", (response) => {
+        if (response.error) {
+          message.error(response.error);
+          return;
+        } else {
+          setBuffs(response.data);
         }
       });
     }
@@ -139,7 +171,6 @@ const Challenge = () => {
                 <div key={index}>{log}</div>
               ))}
             </div>
-            {winner && <div>{winner == "对手" ? "挑战失败" : "挑战成功"}</div>}
           </div>
           <div className={styles.opponent}>
             <div>{opponentUserInfo.name}</div>
