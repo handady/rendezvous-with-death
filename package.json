@@ -14,7 +14,7 @@
   },
   "build": {
     "appId": "com.example.arendezvouswithdeath",
-    "productName": "A Rendezvous With Death",
+    "productName": "Rendezvous With Death",
     "directories": {
       "output": "dist"
     },
@@ -50,7 +50,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": false,
-      "shortcutName": "A Rendezvous With Death"
+      "shortcutName": "Rendezvous With Death"
     }
   },
   "repository": {

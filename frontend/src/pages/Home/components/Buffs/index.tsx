@@ -4,6 +4,9 @@ import { Image, Tooltip, Progress } from "antd";
 import styles from "./index.module.scss";
 
 const Buffs = ({ buffs }) => {
+  const [visible, setVisible] = useState(false);
+  const [scaleStep, setScaleStep] = useState(0.5);
+
   useEffect(() => {
     console.log(buffs);
   }, [buffs]);
@@ -15,14 +18,27 @@ const Buffs = ({ buffs }) => {
           <Tooltip
             placement="bottom"
             color="#f5347f"
-            overlayStyle={{ maxWidth: 800 }}
+            overlayStyle={{ maxWidth: 340 }}
             title={
               buff.level ? (
                 <div>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <div style={{ width: "40px" }}>
+                  <div style={{ display: "flex" }}>
+                    <div style={{ width: "48px" }}>名称：</div>
+                    <div>{buff.name}</div>
+                  </div>
+                  {buff.level.effects.map((effect, index) => (
+                    <div
+                      key={index}
+                      style={{ display: "flex", justifyContent: "flex-start" }}
+                    >
+                      <div style={{ width: "48px", flexShrink: 0 }}>
+                        {effect.type === "passive" ? "被动：" : "主动："}
+                      </div>
+                      <div>{effect.description}</div>
+                    </div>
+                  ))}
+                  <div style={{ display: "flex" }}>
+                    <div style={{ width: "60px", textAlign: "center" }}>
                       {buff.level.level + "级"}
                     </div>
                     <Progress
@@ -32,17 +48,6 @@ const Buffs = ({ buffs }) => {
                       strokeColor={"#34aef5"}
                     />
                   </div>
-                  {buff.level.effects.map((effect, index) => (
-                    <div
-                      key={index}
-                      style={{ display: "flex", justifyContent: "flex-start" }}
-                    >
-                      <div>
-                        {effect.type === "passive" ? "被动：" : "主动："}
-                      </div>
-                      <div>{effect.description}</div>
-                    </div>
-                  ))}
                 </div>
               ) : null
             }
@@ -50,10 +55,25 @@ const Buffs = ({ buffs }) => {
             <Image
               className={styles["buff-image"]}
               src={buff.imagePath}
+              width={50}
               preview={false}
-              width={32}
+              onClick={() => {
+                setVisible(true);
+              }}
             />
           </Tooltip>
+          <Image
+            className={styles["buff-image"]}
+            style={{ display: "none" }}
+            src={buff.imagePath}
+            width={50}
+            preview={{
+              visible,
+              scaleStep,
+              src: buff.imagePath,
+              onVisibleChange: (visible) => setVisible(visible),
+            }}
+          />
         </div>
       ))}
     </div>
