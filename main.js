@@ -6,7 +6,7 @@ const { setupIpcHandlers } = require("./electron/ipcHandlers");
 let installPath;
 
 function createWindow() {
-  console.log('Creating window...');
+  console.log("Creating window...");
   // 创建浏览器窗口
   let mainWindow = new BrowserWindow({
     width: 1440,
@@ -30,6 +30,9 @@ function createWindow() {
   // 打开开发者工具
   // mainWindow.webContents.openDevTools();
 
+  // 移除默认菜单
+  mainWindow.removeMenu();
+
   // 当 window 被关闭，这个事件会被触发
   mainWindow.on("closed", function () {
     // 取消引用 window 对象，如果你的应用支持多窗口的话，
@@ -42,7 +45,7 @@ function createWindow() {
 // Electron 会在初始化后并准备创建浏览器窗口时，调用这个函数。
 // 部分 API 在 ready 事件触发后才能使用。
 app.on("ready", function () {
-  installPath = path.dirname(app.getPath('exe'));
+  installPath = path.dirname(app.getPath("exe"));
   createWindow();
   setupIpcHandlers(installPath);
 });
