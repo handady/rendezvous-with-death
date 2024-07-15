@@ -16,7 +16,7 @@
   display: inline-block;
   width: 66px;
   height: 62px;
-  background-image: url('./btn.png');
+  background-image: url("./btn.png");
   background-size: 100% 100%;
   text-align: center;
   line-height: 64px;
@@ -30,10 +30,6 @@
     transform: scale(1.1);
     color: #f5347f;
   }
-}
-
-.box {
-  cursor: pointer;
 }
 
 .box img {

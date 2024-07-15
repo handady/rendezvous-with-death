@@ -211,15 +211,18 @@ function setupIpcHandlers(installPath) {
   });
 
   // 约会
-  ipcMain.on("appointment", async (event) => {
-    const now = dayjs().format("YYYY-MM-DD");
-    const [year, month, day] = now.split("-");
+  ipcMain.on("appointment", async (event, args) => {
+    const { date } = args; // 从传入的参数中获取日期
+    const targetDate = date
+      ? dayjs(date).format("YYYY-MM-DD")
+      : dayjs().format("YYYY-MM-DD");
+    const [year, month, day] = targetDate.split("-");
     const filePath = getInstallPath("data", year, month, `${day}.json`);
     const diaryFilePath = getInstallPath("data", "diary.json");
 
     try {
       if (!(await fileExists(filePath))) {
-        event.reply("appointmentResponse", { error: "今天没有可约会的内容" });
+        event.reply("appointmentResponse", { error: "当天没有可约会的内容" });
         return;
       }
 
@@ -229,17 +232,17 @@ function setupIpcHandlers(installPath) {
         .map((element) => element.text);
 
       if (resultArray.length === 0) {
-        event.reply("appointmentResponse", { error: "今天没有可约会的内容" });
+        event.reply("appointmentResponse", { error: "当天没有可约会的内容" });
         return;
       }
 
       if (!(await fileExists(diaryFilePath))) {
-        event.reply("appointmentResponse", { error: "今天没有可约会的内容" });
+        event.reply("appointmentResponse", { error: "当天没有可约会的内容" });
         return;
       }
 
       const diaryEntries = await readFile(diaryFilePath);
-      const todayData = diaryEntries.filter((item) => item.time === now);
+      const todayData = diaryEntries.filter((item) => item.time === targetDate);
 
       event.reply("appointmentResponse", {
         success: true,
@@ -253,26 +256,29 @@ function setupIpcHandlers(installPath) {
 
   // 保存约会内容
   ipcMain.on("saveAppointment", async (event, content) => {
-    const now = dayjs().format("YYYY-MM-DD");
+    const { date, appointmentTheme, appointmentContent } = content; // 从传入的内容中获取日期和约会内容
+    const targetDate = date
+      ? dayjs(date).format("YYYY-MM-DD")
+      : dayjs().format("YYYY-MM-DD");
     const filePath = getInstallPath("data", "diary.json");
 
     try {
       const diaryEntries = await readFile(filePath);
 
-      // 查找当天的条目
-      let targetObject = diaryEntries.find((item) => item.time === now);
+      // 查找目标日期的条目
+      let targetObject = diaryEntries.find((item) => item.time === targetDate);
 
       if (targetObject) {
-        // 修改当天条目的指定属性
-        targetObject.appointmentTheme = content.appointmentTheme;
-        targetObject.appointmentContent = content.appointmentContent;
-        targetObject.time = now; // 确保 time 也被更新
+        // 修改目标日期条目的指定属性
+        targetObject.appointmentTheme = appointmentTheme;
+        targetObject.appointmentContent = appointmentContent;
+        targetObject.time = targetDate; // 确保 time 也被更新
 
         // 写入更新后的内容到文件
         await writeFile(filePath, diaryEntries);
       } else {
         event.reply("saveAppointmentResponse", {
-          error: "今天没有可约会的内容",
+          error: "当天没有可约会的内容",
         });
         return;
       }
@@ -285,7 +291,7 @@ function setupIpcHandlers(installPath) {
       }
 
       let knowledgeEntries = await readFile(knowledgeFilePath);
-      const knowledgeSplit = splitTheme(content.appointmentTheme);
+      const knowledgeSplit = splitTheme(appointmentTheme);
 
       // 遍历 knowledgeSplit，更新或添加到 knowledgeEntries
       knowledgeSplit.forEach((splitItem) => {
@@ -295,20 +301,20 @@ function setupIpcHandlers(installPath) {
 
         if (existingEntry) {
           // 检查最后修改时间
-          if (dayjs(existingEntry.lastModified).isSame(now, "day")) {
+          if (dayjs(existingEntry.lastModified).isSame(targetDate, "day")) {
             // 如果时间相同，不增加权重
             return;
           } else {
             // 如果时间不同，增加权重，并更新最后修改时间
             existingEntry.weight += 1;
-            existingEntry.lastModified = now;
+            existingEntry.lastModified = targetDate;
           }
         } else {
           // 添加新的知识点，设置权重为1，并设置最后修改时间
           knowledgeEntries.push({
             content: splitItem,
             weight: 1,
-            lastModified: now,
+            lastModified: targetDate,
           });
         }
       });

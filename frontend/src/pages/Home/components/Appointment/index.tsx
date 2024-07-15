@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { message, Modal, Form, Input, Button, Collapse } from "antd";
+import {
+  message,
+  Modal,
+  Form,
+  Input,
+  Button,
+  Collapse,
+  DatePicker,
+} from "antd";
 import styles from "./index.module.scss"; // 导入Sass文件
+import dayjs from "dayjs";
 
 const { TextArea } = Input;
 
@@ -10,9 +19,17 @@ const Appointment = ({ dayLeft = 0, loadData }) => {
   const [visible, setVisible] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [collapseText, setCollapseText] = useState([]);
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null) as any;
 
   const appointment = () => {
-    window.electronAPI.send("appointment");
+    setDatePickerVisible(true); // 显示日期选择器对话框
+  };
+
+  const handleDatePickerOk = (date) => {
+    setSelectedDate(date);
+    setDatePickerVisible(false);
+    window.electronAPI.send("appointment", { date: date.format("YYYY-MM-DD") });
     window.electronAPI.once("appointmentResponse", (response) => {
       if (response.error) {
         console.error(response.error);
@@ -39,12 +56,14 @@ const Appointment = ({ dayLeft = 0, loadData }) => {
     form
       .validateFields()
       .then((values) => {
-        setVisible(true);
+        setSubmitLoading(true);
         window.electronAPI.send("saveAppointment", {
           appointmentTheme: values.theme,
           appointmentContent: values.content,
+          date: selectedDate.format("YYYY-MM-DD"), // 传递选择的日期
         });
         window.electronAPI.once("saveAppointmentResponse", (response) => {
+          setSubmitLoading(false);
           if (response.error) {
             console.error(response.error);
             message.error(response.error);
@@ -64,16 +83,32 @@ const Appointment = ({ dayLeft = 0, loadData }) => {
 
   return (
     <div className={styles.sidebar}>
-      <div className={styles.box} onClick={appointment}>
+      <div className={styles.box}>
         <div style={{ fontSize: "18px" }}>
           剩<span style={{ color: "#ed74b1", margin: "0 4px" }}>{dayLeft}</span>
           天
         </div>
         <div style={{ fontSize: "18px" }}>与死亡共偕连理</div>
-        <li style={{ marginTop: "5px" }}>
+        <li
+          style={{ marginTop: "5px", cursor: "pointer" }}
+          onClick={appointment}
+        >
           <div>约会</div>
         </li>
       </div>
+      <Modal
+        title="选择日期"
+        open={datePickerVisible}
+        onCancel={() => setDatePickerVisible(false)}
+        onOk={() => handleDatePickerOk(selectedDate)}
+        width={"30%"}
+      >
+        <DatePicker
+          style={{ width: "100%" }}
+          onChange={(date) => setSelectedDate(date)}
+          disabledDate={(current) => current && current > dayjs().endOf("day")}
+        />
+      </Modal>
       <Modal
         className={styles["appointment-modal"]}
         title="约会"
@@ -84,7 +119,7 @@ const Appointment = ({ dayLeft = 0, loadData }) => {
         }}
         footer={null}
         destroyOnClose
-        width={"40%"}
+        width={"50%"}
       >
         <Form
           form={form}
