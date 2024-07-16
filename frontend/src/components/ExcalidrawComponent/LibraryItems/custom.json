@@ -1,38 +1,6 @@
 [
   [
     {
-      "type": "image",
-      "version": 549,
-      "versionNonce": 2032158227,
-      "isDeleted": false,
-      "id": "4CnCm7B0aq9jUNzDNLpvk",
-      "fillStyle": "solid",
-      "strokeWidth": 2,
-      "strokeStyle": "solid",
-      "roughness": 1,
-      "opacity": 100,
-      "angle": 0,
-      "x": 581.9354672553351,
-      "y": -61.48938652721506,
-      "strokeColor": "transparent",
-      "backgroundColor": "transparent",
-      "width": 254.1290654893301,
-      "height": 776.7912730544301,
-      "seed": 87238717,
-      "groupIds": [],
-      "frameId": null,
-      "roundness": null,
-      "boundElements": [],
-      "updated": 1721115164973,
-      "link": null,
-      "locked": false,
-      "status": "pending",
-      "fileId": "c3c575620028daeb72aa8c48c83b7464ed863bf7",
-      "scale": [1, 1]
-    }
-  ],
-  [
-    {
       "type": "line",
       "version": 2134,
       "versionNonce": 774974104,
