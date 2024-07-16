@@ -5,6 +5,18 @@ import styles from "./index.module.scss";
 import { Excalidraw, serializeAsJSON } from "./excalidraw.development.js";
 // import { Excalidraw, serializeAsJSON } from "@excalidraw/excalidraw";
 
+import bubblesJson from "./LibraryItems/bubbles.json";
+import basicShapesJson from "./LibraryItems/basic-shapes.json";
+import postItJson from "./LibraryItems/post-it.json";
+import someHanddrawnSignsJson from "./LibraryItems/some-handdrawn-signs.json";
+const libraryItems = [
+  someHanddrawnSignsJson[0].elements,
+  someHanddrawnSignsJson[1].elements,
+  ...postItJson,
+  ...bubblesJson,
+  ...basicShapesJson,
+] as any;
+
 const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
   const [elements, setElements] = useState([]) as any;
   const [appState, setAppState] = useState({}) as any;
@@ -105,6 +117,7 @@ const ExcalidrawComponent = ({ closeDialog, currentItem }) => {
             elements,
             appState,
             files,
+            libraryItems,
           }}
           onChange={handleChange}
           langCode="zh-CN"
