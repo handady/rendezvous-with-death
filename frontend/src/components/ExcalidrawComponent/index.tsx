@@ -9,7 +9,9 @@ import bubblesJson from "./LibraryItems/bubbles.json";
 import basicShapesJson from "./LibraryItems/basic-shapes.json";
 import postItJson from "./LibraryItems/post-it.json";
 import someHanddrawnSignsJson from "./LibraryItems/some-handdrawn-signs.json";
+import customJson from "./LibraryItems/custom.json";
 const libraryItems = [
+  ...customJson,
   someHanddrawnSignsJson[0].elements,
   someHanddrawnSignsJson[1].elements,
   ...postItJson,
